@@ -8,9 +8,9 @@ Form
 <script src="/schema-forms/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
 <script> 
-    const diagram1 = "Note over Consumer,/employees: 1. Localized cachable schema"
-        + "Consumer->/employees: GET 'application/schema+json'"
-        + "Note right of /employees: Employees"
+    const diagram1 = "Note over Consumer,/employees: 1. Localized cachable schema\n"
+        + "Consumer->/employees: GET 'application/schema+json'\n"
+        + "Note right of /employees: Employees\n"
         + "/employees-->Consumer: JSON Schema";
 
   var d = Diagram.parse(diagram1);
