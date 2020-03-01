@@ -1,6 +1,6 @@
 Hi
 
-
+Form
 <div id="diagram">Diagram will be placed here</div>
 
 <script src="/schema-forms/js/bower-webfontloader/webfont.js" ></script>
