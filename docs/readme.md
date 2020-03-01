@@ -8,12 +8,12 @@ Form
 <script src="/schema-forms/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
 <script> 
-    const = "Note over Consumer,/employees: 1. Localized cachable schema"
+    const diagram1 = "Note over Consumer,/employees: 1. Localized cachable schema"
         + "Consumer->/employees: GET 'application/schema+json'"
         + "Note right of /employees: Employees"
-        + "/employees-->Consumer: JSON Schema"
+        + "/employees-->Consumer: JSON Schema";
 
-  var d = Diagram.parse("A->B: Does something");
+  var d = Diagram.parse(diagram1);
   var options = {theme: 'simple'};
   d.drawSVG('diagram1', options);
 </script>
