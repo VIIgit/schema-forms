@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  title: employees
+  version: '1.0.0-SNAPSHOT'
+  description: |
+    
+tags:
+  - default
+servers:
+  - url: 'http://example.com:3000'
+paths:
+  /employees:
+    get:
+      summary: List of Employees
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+            application/prs.hal-forms+json; profile=schema:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Employee'
+                - $ref: '#/components/schemas/EmployeeTemplates'
+          headers: {}
+      operationId: get-employees
+    post:
+      summary: ''
+      operationId: post-employees
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+              
+        description: ''
+  '/employees/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Details of an Employee
+      operationId: get-employees-id
+      responses:
+        '200':
+          description: Created
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1        
+        firstName:
+          type: string
+          example: John
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - TERMINATED
+          - RESIGNED
+        _links:
+          allOf:
+          - $ref: "#/components/schemas/EmployeeLink"
+          - $ref: "#/components/schemas/LeavesCompany"
+
+    EmployeeTemplates:
+      type: object
+      properties:
+        _templates:
+          type: object
+          properties:
+            default: 
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Employee
+                method:
+                  type: string
+                  example: POST
+                contentType: 
+                  type: string
+                  example: application/json
+                jsonSchema:
+                  type: object
+                  example:
+                    $id: "http://example.com/api/employees"
+                    $schema: "https://json-schema.org/draft/2019-09/schema"
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1        
+                      firstName:
+                        type: string
+                        example: John
+                        minLength: 1
+                      lastName:
+                        type: string
+                        example: Doe
+                        minLength: 1
+                      status:
+                        type: string
+                        oneOf:
+                        - const: ACTIVE
+                          title: Aktive
+                        - TERMINATED:
+                          title: Gefeuert
+                        - RESIGNED:
+                          title: Gekündet
+
+
+    EmployeeLink:
+      type: object
+      required: 
+      - self
+      properties:
+        self:
+          type: object
+          required: 
+          - href
+          properties:
+            href:
+              type: string
+              example: 'http://example.com/employees/1'
+
+    LeavesCompany:
+      type: object
+      properties:
+        leavesCompany:
+          type: object
+          required:
+          - href
+          properties:
+            href:
+              type: string
+              example: 'http://example.com/employees/1'
