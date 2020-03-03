@@ -3,19 +3,25 @@ info:
   title: employees
   version: '1.0.0-SNAPSHOT'
   description: |
-    
+    https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas
 tags:
-  - default
+  - name: default
+    description: ""
 servers:
   - url: 'http://example.com:3000'
 paths:
   /employees:
     get:
       summary: List of Employees
-      tags: []
       responses:
         '200':
           description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: s8437b6154v76348
+              description: To cache resources
           content:
             application/hal+json:
               schema:
@@ -25,10 +31,24 @@ paths:
                 allOf:
                 - $ref: '#/components/schemas/Employee'
                 - $ref: '#/components/schemas/EmployeeTemplates'
-          headers: {}
+            application/schema+json:
+              schema:
+                type: object
+              examples:
+                Static cacheable schema:
+                  description:
+                    "Static localized JSON Schema   
+                    
+                    _Remark: Example Value displays also $$ref, which is just a side-effect _"
+                  value:
+                    allOf:
+                    - $id: "http://example.com/api/employees"
+                      $schema: "https://json-schema.org/draft/2019-09/schema"
+                    - $ref: "#/components/schemas/Employee"
+        
       operationId: get-employees
     post:
-      summary: ''
+      summary: 'Register employee'
       operationId: post-employees
       responses:
         '201':
@@ -65,6 +85,36 @@ paths:
       responses:
         '200':
           description: Created
+    patch:
+      summary: Update Employee
+      operationId: patch-employees-id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+
+    delete:
+      summary: Remove Employee
+      operationId: delete-employees-id
+      responses:
+        '204':
+          description: Deleted
 components:
   schemas:
     Employee:
@@ -80,13 +130,18 @@ components:
         lastName:
           type: string
           minLength: 1
+        birthday:
+          type: string
+          format: date
+          example: "2000-12-31"
         status:
           type: string
           enum:
           - ACTIVE
-          - TERMINATED
           - RESIGNED
         _links:
+          type: object
+          readOnly: true
           allOf:
           - $ref: "#/components/schemas/EmployeeLink"
           - $ref: "#/components/schemas/LeavesCompany"
@@ -97,7 +152,7 @@ components:
         _templates:
           type: object
           properties:
-            default: 
+            default:
               type: object
               properties:
                 title:
@@ -127,16 +182,23 @@ components:
                         type: string
                         example: Doe
                         minLength: 1
+                      birthday:
+                        type: string
+                        format: date
+                        example: 2000-12-31
                       status:
                         type: string
                         oneOf:
                         - const: ACTIVE
-                          title: Aktive
-                        - TERMINATED:
-                          title: Gefeuert
-                        - RESIGNED:
-                          title: Gekündet
-
+                          title: Aktiv
+                        - const: RESIGNED
+                          title: Gekündigt
+            deleteEmployee:
+              type: object
+              properties:
+                method:
+                  type: string
+                  example: DELETE
 
     EmployeeLink:
       type: object
