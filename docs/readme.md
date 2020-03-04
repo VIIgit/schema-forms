@@ -3,6 +3,9 @@ Hi
 Example [/api/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/employees.yaml)
 <div id="diagram1"></div>
 
+
+https://viigit.github.io/schema-forms/
+
 <script src="/schema-forms/js/bower-webfontloader/webfont.js" ></script>
 <script src="/schema-forms/js/snap.svg/snap.svg-min.js" ></script>
 <script src="/schema-forms/js/underscore/underscore-min.js" ></script>
