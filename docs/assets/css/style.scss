@@ -3,9 +3,14 @@
 
 @import "jekyll-theme-slate";
 
-#header_wrap > header::after {
-    content: url(/schema-forms/assets/images/schema-forms-2.png);
+#header_wrap > header::after {    background-image: url('/schema-forms/assets/images/schema-forms-2.png');
+    background-size: 300px;
+    display: inline-block;
+    width: 300px; 
+    content:"";
 }
+
+
 
 #project_title, #project_tagline {
     display: none;
