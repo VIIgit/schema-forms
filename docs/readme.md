@@ -1,3 +1,9 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/schema-forms/assets/js/bower-webfontloader/webfont.js" ></script>
+<script src="/schema-forms/assets/js/snap.svg/snap.svg-min.js" ></script>
+<script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
+<script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
+
 Hi
 
 Example API [/api/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/employees.yaml)
@@ -18,14 +24,13 @@ Provider-->Consumer: JSON Schema
 
 [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
 
-<script src="/schema-forms/assets/js/bower-webfontloader/webfont.js" ></script>
-<script src="/schema-forms/assets/js/snap.svg/snap.svg-min.js" ></script>
-<script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
-<script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 <script> 
 
-  var options = {theme: 'hand'};
-  $(".diagram").sequenceDiagram(options);
+    var options = {theme: 'simple'};
 
+    $(".diagram").sequenceDiagram(options);
+    
+
+  
 </script>
