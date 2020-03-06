@@ -8,48 +8,55 @@ A backward-compatible extension for [HAL-Form](http://rwcbook.github.io/hal-form
 
 # Motivation
 
-# Use Cases
+# Workflows
 
 Example API [/api/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/employees.yaml)
 
-### Collections
-
+## Read Only
 <div class="diagram">
 Note over Consumer: 1. Read localized JSON Schema\nof Employees
-Consumer->Provider: GET /employees ('application/schema+json')
+Consumer->Provider: GET /employees\nAccept application/schema+json
 Note right of Provider: Localized static JSON\nof the Employee Resource\nwith an ETag Header
-Note right of Provider: Depends on `Cache-Control`\n304 or 200)
+Note right of Provider: Depends on `Cache-Control`
 Provider-->Consumer: 304: Not modified
+Note right of Provider: or
 Provider-->Consumer: 200: JSON Schema
 Note over Consumer: 2. Read Employees (Read only)
-Consumer->Provider: GET /employees ('application/hal+json')
+Consumer->Provider: GET /employees\nAccept application/hal+json
 Note right of Provider: Collection of Employees\nwith HAL links
-Provider-->Consumer: JSON Data
-Note over Consumer: 3. Add Employees
-Consumer->Provider: GET /employees ('application/prs.hal-forms+json; profile=""')
-Note right of Provider: Collection of Employees\nwith HAL links and HAL-Form's templates
 Provider-->Consumer: JSON Data
 </div>
 
-### Resources
+With the retieved JSON data (collection of employees) and JSON Schema (of Employees)
 
+| ID  | Firstname | Lastname | Date of birth | Status         |
+| --- | :---      | :---     | :---          | :---           |
+| 1   | John      | Doe      | 1967-12-22    | Festangestellt |
+| 2   | Mary      | Major    | 2000-02-28    | Gekündigt      |
+
+## Read Only
 <div class="diagram">
 Note over Consumer: 1. Read localized JSON Schema\nof Employees
-Consumer->Provider: GET /employees ('application/schema+json')
+Consumer->Provider: GET /employees\nAccept application/schema+json
 Note right of Provider: Localized static JSON\nof the Employee Resource\nwith an ETag Header
-Note right of Provider: Depends on `Cache-Control`\n304 or 200)
+Note right of Provider: Depends on `Cache-Control`
 Provider-->Consumer: 304: Not modified
+Note right of Provider: or
 Provider-->Consumer: 200: JSON Schema
-Note over Consumer: 2. Read Employees (Read only)
-Consumer->Provider: GET /employees ('application/hal+json')
-Note right of Provider: Collection of Employees\nwith HAL links
-Provider-->Consumer: JSON Data
-Note over Consumer: 3. Add Employees
-Consumer->Provider: GET /employees ('application/prs.hal-forms+json; profile=""')
-Note right of Provider: Collection of Employees\nwith HAL links and HAL-Form's templates
+Note over Consumer: 2. Filtering and/or adding Employees
+Consumer->Provider: GET /employees\nAccept application/prs.hal-forms+json
+Note right of Provider: Collection of Employees with\n- HAL links\n- HAL-Form's templates
 Provider-->Consumer: JSON Data
 </div>
 
+With the retieved JSON data (collection of employees) and JSON Schema (of Employees)
+
+| ID  | Firstname | Lastname | Date of birth | Status         |             |
+| --- | :---      | :---     | :---          | :---           | :---:                          |
+| 1   | John      | Doe      | 1967-12-22    | Festangestellt | <div class="btn"> remove <div> |
+| 2   | Mary      | Major    | 2000-02-28    | Gekündigt      | <div class="btn"> remove <div> |
+
+<div class="btn"> add emplyee <div>
 
 # References
 HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)

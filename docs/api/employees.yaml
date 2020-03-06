@@ -25,11 +25,11 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Employee'
+                $ref: '#/components/schemas/ExistingEmployee'
             application/prs.hal-forms+json; profile=schema:
               schema:
                 allOf:
-                - $ref: '#/components/schemas/Employee'
+                - $ref: '#/components/schemas/ExistingEmployee'
                 - $ref: '#/components/schemas/EmployeeTemplates'
             application/schema+json:
               schema:
@@ -39,12 +39,10 @@ paths:
                   description:
                     "Static localized JSON Schema   
                     
-                    _Remark: Example Value displays also $$ref, which is just a side-effect _"
+                    _Remark: Should be modelled strictly. Example Value displays also $$ref, which is just a side-effect _"
                   value:
-                    allOf:
-                    - $id: "http://example.com/api/employees"
-                      $schema: "https://json-schema.org/draft/2019-09/schema"
-                    - $ref: "#/components/schemas/Employee"
+                    x-ref: dd
+
         
       operationId: get-employees
     post:
@@ -114,15 +112,18 @@ paths:
       operationId: delete-employees-id
       responses:
         '204':
-          description: Deleted
+          description: Removed
 components:
   schemas:
-    Employee:
+    EmployeeId:
       type: object
       properties:
         id:
           type: integer
           example: 1        
+    Employee:
+      type: object
+      properties:
         firstName:
           type: string
           example: John
@@ -137,14 +138,15 @@ components:
         status:
           type: string
           enum:
-          - ACTIVE
+          - PART-TIME
+          - PERMANENT
           - RESIGNED
-        _links:
-          type: object
-          readOnly: true
-          allOf:
-          - $ref: "#/components/schemas/EmployeeLink"
-          - $ref: "#/components/schemas/LeavesCompany"
+    ExistingEmployee:
+      allOf:
+      - $ref: "#/components/schemas/EmployeeId"
+      - $ref: "#/components/schemas/Employee"
+      - $ref: "#/components/schemas/EmployeeLinks"
+
 
     EmployeeTemplates:
       type: object
@@ -189,8 +191,10 @@ components:
                       status:
                         type: string
                         oneOf:
-                        - const: ACTIVE
-                          title: Aktiv
+                        - const: PART-TIME
+                          title: Teilzeit
+                        - const: PERMANENT
+                          title: Festangestellt
                         - const: RESIGNED
                           title: Gekündigt
             deleteEmployee:
@@ -199,6 +203,16 @@ components:
                 method:
                   type: string
                   example: DELETE
+
+    EmployeeLinks:
+      type: object
+      properties:
+        _links:
+          type: object
+          readOnly: true
+          allOf:
+          - $ref: "#/components/schemas/EmployeeLink"
+          - $ref: "#/components/schemas/LeavesCompany"
 
     EmployeeLink:
       type: object
@@ -225,3 +239,16 @@ components:
             href:
               type: string
               example: 'http://example.com/employees/1'
+
+    EmployeesSchema:
+      allOf:
+      - type: object
+        properties:
+          $id:
+            type: string
+            example: "http://example.com/api/employees"
+          $schema:
+            type: string
+            example: "https://json-schema.org/draft/2019-09/schema"
+      - $ref: "#/components/schemas/Employee"
+      
