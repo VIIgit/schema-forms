@@ -25,12 +25,10 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ExistingEmployee'
+                $ref: '#/components/schemas/Employees'
             application/prs.hal-forms+json; profile=schema:
               schema:
-                allOf:
-                - $ref: '#/components/schemas/ExistingEmployee'
-                - $ref: '#/components/schemas/EmployeeTemplates'
+                $ref: '#/components/schemas/EmployeesTemplates'
             application/schema+json:
               schema:
                 type: object
@@ -41,7 +39,33 @@ paths:
                     
                     _Remark: Should be modelled strictly. Example Value displays also $$ref, which is just a side-effect _"
                   value:
-                    x-ref: dd
+                    $id: "http://example.com/api/employees"
+                    $schema: "https://json-schema.org/draft/2019-09/schema"
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1        
+                      firstName:
+                        type: string
+                        example: John
+                        minLength: 1
+                      lastName:
+                        type: string
+                        example: Doe
+                        minLength: 1
+                      birthday:
+                        type: string
+                        format: date
+                      status:
+                        type: string
+                        oneOf:
+                        - const: PART-TIME
+                          title: Teilzeit
+                        - const: PERMANENT
+                          title: Festangestellt
+                        - const: RESIGNED
+                          title: Gekündigt
 
         
       operationId: get-employees
@@ -113,8 +137,25 @@ paths:
       responses:
         '204':
           description: Removed
+
 components:
+  
+
   schemas:
+
+    Employees:
+      allOf:
+      - type: object
+        properties:
+          _embedded:
+            type: object
+            properties:
+              employees:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExistingEmployee"
+      - $ref: '#/components/schemas/EmployeesLinks'
+
     EmployeeId:
       type: object
       properties:
@@ -204,6 +245,59 @@ components:
                   type: string
                   example: DELETE
 
+    EmployeesTemplates:
+      allOf:
+      - $ref: '#/components/schemas/Employees'
+      - type: object
+        properties:
+          _templates:
+            type: object
+            properties:
+              addEmployee:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: Add Employee
+                  method:
+                    type: string
+                    example: POST
+                  contentType: 
+                    type: string
+                    example: application/json
+                  jsonSchema:
+                    type: object
+                    example:
+                      $id: "http://example.com/api/employees"
+                      $schema: "https://json-schema.org/draft/2019-09/schema"
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1        
+                        firstName:
+                          type: string
+                          example: John
+                          minLength: 1
+                        lastName:
+                          type: string
+                          example: Doe
+                          minLength: 1
+                        birthday:
+                          type: string
+                          format: date
+                          example: 2000-12-31
+                        status:
+                          type: string
+                          oneOf:
+                          - const: PART-TIME
+                            title: Teilzeit
+                          - const: PERMANENT
+                            title: Festangestellt
+                          - const: RESIGNED
+                            title: Gekündigt
+
+
     EmployeeLinks:
       type: object
       properties:
@@ -228,6 +322,29 @@ components:
               type: string
               example: 'http://example.com/employees/1'
 
+    EmployeesLinks:
+      type: object
+      properties:
+        _links:
+          type: object
+          readOnly: true
+          allOf:
+          - $ref: "#/components/schemas/EmployeesLink"
+          
+    EmployeesLink:
+      type: object
+      required: 
+      - self
+      properties:
+        self:
+          type: object
+          required: 
+          - href
+          properties:
+            href:
+              type: string
+              example: 'http://example.com/employees'
+              
     LeavesCompany:
       type: object
       properties:

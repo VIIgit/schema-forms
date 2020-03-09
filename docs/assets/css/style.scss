@@ -27,12 +27,12 @@
 	text-decoration: none;
 	display: inline-block;
 	cursor: pointer;
-	text-align: center;
+    text-align: center;
+	border-width: 0px;
 }
 
 .btn-blue {
 	background-color: #3D94F6;
-	border: solid #337FED 1px;
 }
 
 .btn-blue:hover {
@@ -41,7 +41,6 @@
 
 .btn-red {
     background-color: #CF0A22;
-    border: solid #CF0A22 1px;
 }
 
 .btn-red:hover {
@@ -50,7 +49,6 @@
 
 .btn-green {
     background-color: rgb(8, 165, 2);
-    border: solid  rgb(13, 133, 8);
 }
 
 .btn-green:hover {

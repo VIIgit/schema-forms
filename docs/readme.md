@@ -9,6 +9,118 @@ A backward-compatible extension for [HAL-Form](http://rwcbook.github.io/hal-form
 # Motivation
 
 # Workflows
+## 1. Get Data only
+   
+Request
+```
+GET /employees
+Accept application/hal+json
+```
+Respose
+```
+{
+  "_embedded": {
+    "employees": [
+      {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "string",
+        "birthday": "2000-12-31",
+        "status": "PART-TIME",
+        "_links": {
+          "self": {
+            "href": "http://example.com/employees/1"
+          },
+          "leavesCompany": {
+            "href": "http://example.com/employees/1"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://example.com/employees"
+    }
+  }
+}
+```
+
+## 2. Get Data with HAL-Schema-Forms
+   
+Request
+```
+GET /employees
+Accept: application/prs.hal-forms+json;
+```
+Respose
+```
+Content-Type: application/prs.hal-forms+json;
+
+{
+  "_embedded": {
+    "employees": [
+      {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "string",
+        "birthday": "2000-12-31",
+        "status": "PART-TIME",
+        "_links": {
+          "self": {
+            "href": "http://example.com/employees/1"
+          },
+          "leavesCompany": {
+            "href": "http://example.com/employees/1"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://example.com/employees"
+    }
+  },
+  "_templates": {
+    "addEmployee": {
+      "title": "Add Employee",
+      "method": "POST",
+      "contentType": "application/json",
+      "jsonSchema": {
+        "$id": "http://example.com/api/employees",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "birthday"
+        ],
+        "properties": {
+          "firstName": {
+          },
+          "lastName": {
+          },
+          "birthday": {
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "PART-TIME"
+              },
+              {
+                "const": "PERMANENT"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
 
 Example API [/api/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/employees.yaml)
 
@@ -74,7 +186,7 @@ ___
       <td style="text-align: left">Doe</td>
       <td style="text-align: left">1967-12-22</td>
       <td style="text-align: left">Festangestellt</td>
-      <td style="text-align: center"><div class="btn btn-red">remove</div><div class="btn btn-green">edit</div></td>
+      <td style="text-align: center"><div class="btn btn-red">remove</div><div class="btn btn-blue">edit</div></td>
     </tr>
     <tr>
       <td>2</td>
@@ -82,7 +194,7 @@ ___
       <td style="text-align: left">Major</td>
       <td style="text-align: left">2000-02-28</td>
       <td style="text-align: left">Gekündigt</td>
-      <td style="text-align: center"><div class="btn btn-green">edit</div></td>
+      <td style="text-align: center"><div class="btn btn-blue">edit</div></td>
     </tr>
   </tbody>
 </table>
