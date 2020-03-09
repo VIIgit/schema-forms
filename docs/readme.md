@@ -51,12 +51,42 @@ Provider-->Consumer: JSON Data
 
 With the retieved JSON data (collection of employees) and JSON Schema (of Employees)
 
-| ID  | Firstname | Lastname | Date of birth | Status         |             |
-| --- | :---      | :---     | :---          | :---           | :---:                          |
-| 1   | John      | Doe      | 1967-12-22    | Festangestellt | \<div class="btn"\> remove \</div\>  :x: |
-| 2   | Mary      | Major    | 2000-02-28    | Gekündigt      | \<div class="btn"\> remove \</div\> |
+### Example UI
 
-<div class="btn"> add employee </div>
+#### Employees
+___
+<div class="btn btn-green"> add employee </div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th style="text-align: left">Firstname</th>
+      <th style="text-align: left">Lastname</th>
+      <th style="text-align: left">Date of birth</th>
+      <th style="text-align: left">Status</th>
+      <th style="text-align: center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td style="text-align: left">John</td>
+      <td style="text-align: left">Doe</td>
+      <td style="text-align: left">1967-12-22</td>
+      <td style="text-align: left">Festangestellt</td>
+      <td style="text-align: center"><div class="btn btn-red">remove</div><div class="btn btn-green">edit</div></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td style="text-align: left">Mary</td>
+      <td style="text-align: left">Major</td>
+      <td style="text-align: left">2000-02-28</td>
+      <td style="text-align: left">Gekündigt</td>
+      <td style="text-align: center"><div class="btn btn-green">edit</div></td>
+    </tr>
+  </tbody>
+</table>
+
 
 # References
 HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
