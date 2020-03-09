@@ -11,58 +11,55 @@
     content:"";
 }
 
-#project_title {
-    display: none;
-}
+#project_title 
+    display: none
 
-.btn {
-   -webkit-border-radius: 6px;
-   -moz-border-radius: 6px;
-   border-radius: 6px;
-   color: #FFFFFF;
-   font-family: Arial;
-   font-size: 15px;
-   font-weight: 100;
-   padding: 8px;
-   background-color: #3D94F6;
-   border: solid #337FED 1px;
-   text-decoration: none;
-   display: inline-block;
-   cursor: pointer;
-   text-align: center;
-}
+.btn 
+   -webkit-border-radius: 6px
+   -moz-border-radius: 6px
+   border-radius: 6px
+   color: #FFFFFF
+   font-family: Arial
+   font-size: 15px
+   font-weight: 100
+   padding: 8px
+   background-color: #3D94F6
+   border: solid #337FED 1px
+   text-decoration: none
+   display: inline-block
+   cursor: pointer
+   text-align: center
 
-.btn:hover {
-   background: #0A67CF;
-   border: solid #337FED 1px;
-   -webkit-border-radius: 6px;
-   -moz-border-radius: 6px;
-   border-radius: 6px;
-   text-decoration: none;
-}
 
-.btn-red {
-   -webkit-border-radius: 6px;
-   -moz-border-radius: 6px;
-   border-radius: 6px;
-   color: #FFFFFF;
-   font-family: Arial;
-   font-size: 15px;
-   font-weight: 100;
-   padding: 8px;
-   background-color: #CF0A22;
-   border: solid #CF0A22 1px;
-   text-decoration: none;
-   display: inline-block;
-   cursor: pointer;
-   text-align: center;
-}
+.btn:hover 
+   background: #0A67CF
+   border: solid #337FED 1px
+   -webkit-border-radius: 6px
+   -moz-border-radius: 6px
+   border-radius: 6px
+   text-decoration: none
 
-.btn-red:hover {
-   background: #CF0A22;
-   border: solid #CF0A22 1px;
-   -webkit-border-radius: 6px;
-   -moz-border-radius: 6px;
-   border-radius: 6px;
-   text-decoration: none;
-}
+
+.btn-red
+   -webkit-border-radius: 6px
+   -moz-border-radius: 6px
+   border-radius: 6px
+   color: #FFFFFF
+   font-family: Arial
+   font-size: 15px
+   font-weight: 100
+   padding: 8px
+   background-color: #CF0A22
+   border: solid #CF0A22 1px
+   text-decoration: none
+   display: inline-block
+   cursor: pointer
+   text-align: center
+
+.btn-red:hover 
+   background: #CF0A22
+   border: solid #CF0A22 1px
+   -webkit-border-radius: 6px
+   -moz-border-radius: 6px
+   border-radius: 6px
+   text-decoration: none

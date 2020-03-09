@@ -53,8 +53,8 @@ With the retieved JSON data (collection of employees) and JSON Schema (of Employ
 
 | ID  | Firstname | Lastname | Date of birth | Status         |             |
 | --- | :---      | :---     | :---          | :---           | :---:                          |
-| 1   | John      | Doe      | 1967-12-22    | Festangestellt | <div class="btn"> remove </div> |
-| 2   | Mary      | Major    | 2000-02-28    | Gekündigt      | <div class="btn"> remove </div> |
+| 1   | John      | Doe      | 1967-12-22    | Festangestellt | \<div class="btn"\> remove \</div\>  :x: |
+| 2   | Mary      | Major    | 2000-02-28    | Gekündigt      | \<div class="btn"\> remove \</div\> |
 
 <div class="btn"> add employee </div>
 
