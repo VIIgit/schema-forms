@@ -356,8 +356,6 @@ ___
   <input type="submit" value="search">
 </form>
 
-___
-
 <table>
   <thead>
     <tr>
