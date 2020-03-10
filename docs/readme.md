@@ -47,6 +47,29 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
         }
     }
     ```
+- `properties`
+  
+  if `jsonSchema` is present then `properties` becomes obsolete.
+
+Comparison between HAL Forms `_templates..properties` and JSON Validation Schema
+
+properties | JSON Schema alternative
+:--- | :---
+`name` | attribute's name
+`prompt` | `example` 
+`readOnly` | `readOnly`
+`regex` | `pattern`
+`required` | `required`
+`templated` | ``
+`value` | `default`
+n/a | `title`
+n/a | `description`
+n/a | `type`
+n/a | `oneOf`
+n/a | `anyOf`
+n/a | `maxItems`
+n/a | `minItems`
+|| [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
 
 # Workflow Examples
 
@@ -62,6 +85,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 Response
 ```
+HTTP 200
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
 {
@@ -167,13 +191,15 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 Response
 ```
+HTTP 200
 Content-Type: application/schema+json; charset=utf-8;
 Cache-Control: max-age=3600;
 Etag: x123dfff
 
 {
   "$id": "http://example.com/api/v1/employees",
-  "$schema": "https://json-schema.org/draft/2019-09/schema",  "$defs": {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$defs": {
     "employee": {
         "$anchor": "employee",
         "type": "object",
@@ -241,6 +267,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 Response
 ```
+HTTP 200
 Content-Type: application/hal+json; charset=utf-8;
 
 {
@@ -398,6 +425,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 Response
 ```
+HTTP 200
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
 {
@@ -491,6 +519,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 Response
 ```
+HTTP 200
 Content-Type: application/hal+json; charset=utf-8;
 
 {
@@ -562,6 +591,24 @@ Response of GET /api/v1/employees<br>
 Accept: application/schema+json
 </span>
 </span>
+
+___
+
+<form action="">
+  <label for="fname">First name:</label>
+  <input type="search" id="fname" name="fname"><br>
+  <label for="lname">Last name:</label>
+  <input type="search" id="lname" name="lname"><br>
+  <label for="browser">Status name:</label>
+  <input list="browsers" name="browser">
+  <datalist id="browsers">
+    <option value="Internet Explorer">
+    <option value="Firefox">
+  </datalist><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+___
 
 <table>
   <thead>
