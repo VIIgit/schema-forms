@@ -4,11 +4,51 @@
 <script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
 
-A backward-compatible extension for [HAL-Form](http://rwcbook.github.io/hal-forms/) to provide support dynamic runtime input forms with JSON Schema
+A backward-compatible extension for ) to provide support dynamic runtime input forms with JSON Schema 
 
 # Motivation
+[HAL-Forms](http://rwcbook.github.io/hal-forms/, an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as the attributes needed for each operation.
 
-# Workflows
+Sometimes it is required to do more complex UI Validation than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]`.
+
+The motivation is to combine and extend HAL-Forms with  JSON-Schema and provide localized, cacheable JSON Validation Schemas to make API even more enjoyable to consume (_LOVE**OAS**_).
+
+# Extention of HAL Forms
+## Compliance
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119].
+## Definition
+
+[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `template` element contains a optional `jsonSchema` attribute.
+
+- `jsonSchema`
+  
+  This is a valid JSON Validation Schema. This is an OPTIONAL element. 
+  - The JSON Validation Schema MAY has a canonical URI of a schema (`$id`) to identify and MAY get the full localized and cacheabke JSON Validation Schema.
+    Example:
+    ```
+    "jsonSchema": {
+        "$id": "http://example.com/api/employees#employee",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "properties": {
+           ...
+        }
+    }
+    ```
+  - The JSON Validation Schema SHOULD define ...
+    Example:
+    ```
+    "jsonSchema": {
+        "$id": "http://example.com/api/employees#employee",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "properties": {
+           ...
+        }
+    }
+    ```
+
+# Workflow Examples
 
 ## 1. Get Data with HAL-Forms (JSON Schema enhanced)
    
@@ -52,7 +92,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
     }
   },
   "_templates": {
-    "default": {
+    "self": {
       "title": "Search Employee",
       "method": "GET",
       "contentType": "application/x-www-form-urlencoded",
@@ -107,8 +147,17 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 }
 ```
 
-## 2. Get employee schema
-   
+## 2. Get employee's JSON Validation Schema
+In the response of `_templates`'s `jsonSchema` SHOULD have either and 
+Canonical URI of a schema (`$id`)
+
+```
+"jsonSchema": {
+    "$id": "http://example.com/api/employees#employee"
+    ...
+}
+```
+
 Request
 ```
 GET /employees HTTP/1.1
@@ -341,11 +390,13 @@ Accept: application/schema+json
 
 
 # References
-HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
-The home of JSON Schema [https://json-schema.org](https://json-schema.org)
-Inspired by [APIs you won't hate](https://apisyouwonthate.com/blog/lets-stop-building-apis-around-a-network-hack)
-ETag [Cache-Control](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
-This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
+- HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
+- The home of JSON Schema [https://json-schema.org](https://json-schema.org)
+  - Canonical URI of a schema (`$id`) [JSON Schema 2019-09](https://json-schema.org/draft/2019-09/json-schema-core.html)
+- Inspired by [APIs you won't hate](https://apisyouwonthate.com/blog/lets-stop-building-apis-around-a-network-hack)
+- ETag [Cache-Control](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
+-  Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
+- This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
 
 <script> 
     var options = {theme: 'simple'};
