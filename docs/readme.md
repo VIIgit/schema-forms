@@ -16,7 +16,7 @@ Request
 GET /employees
 Accept application/hal+json
 ```
-Respose
+Response
 ```
 {
   "_embedded": {
@@ -53,7 +53,7 @@ Request
 GET /employees
 Accept: application/prs.hal-forms+json;
 ```
-Respose
+Response
 ```
 Content-Type: application/prs.hal-forms+json;
 
@@ -83,6 +83,24 @@ Content-Type: application/prs.hal-forms+json;
     }
   },
   "_templates": {
+    "default": {
+      "title": "Search Employee",
+      "method": "GET",
+      "contentType": "application/x-www-form-urlencoded",
+      "jsonSchema": {
+        "$id": "http://example.com/api/employees",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "properties": {
+          "firstName": {
+          },
+          "lastName": {
+          },
+          "status": {
+          }
+        }
+      }
+    },
     "addEmployee": {
       "title": "Add Employee",
       "method": "POST",
