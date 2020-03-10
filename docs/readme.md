@@ -350,8 +350,8 @@ ___
   <label for="status">Status</label>
   <input list="status" name="status">
   <datalist id="status">
-    <option value="Part-time">
-    <option value="Permanent">
+    <option value="Part-time"></option>
+    <option value="Permanent"></option>
   </datalist><br><br>
   <input type="submit" value="search">
 </form>
