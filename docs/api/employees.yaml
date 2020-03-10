@@ -8,7 +8,7 @@ tags:
   - name: default
     description: ""
 servers:
-  - url: 'http://example.com:3000'
+  - url: 'http://example.com/api/v1'
 paths:
   /employees:
     get:

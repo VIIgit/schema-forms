@@ -7,11 +7,11 @@
 A backward-compatible extension for ) to provide support dynamic runtime input forms with JSON Schema 
 
 # Motivation
-[HAL-Forms](http://rwcbook.github.io/hal-forms/, an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as the attributes needed for each operation.
+[HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as the attributes needed for each operation.
 
-Sometimes it is required to do more complex UI Validation than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]`.
+Sometimes more complex UI Validation is required than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]` to be able to submit a valid form.
 
-The motivation is to combine and extend HAL-Forms with  JSON-Schema and provide localized, cacheable JSON Validation Schemas to make API even more enjoyable to consume (_LOVE**OAS**_).
+The motivation is to combine and extend HAL-Forms with  JSON-Schema and provide a localized, cacheable JSON Validation Schema to make API even more enjoyable to consume (I _LOVE**OAS**_).
 
 # Extention of HAL Forms
 ## Compliance
@@ -27,7 +27,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
     Example:
     ```
     "jsonSchema": {
-        "$id": "http://example.com/api/employees#employee",
+        "$id": "http://example.com/api/v1/employees#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "properties": {
@@ -39,7 +39,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
     Example:
     ```
     "jsonSchema": {
-        "$id": "http://example.com/api/employees#employee",
+        "$id": "http://example.com/api/v1/employees#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "properties": {
@@ -50,11 +50,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 # Workflow Examples
 
-## 1. Get Data with HAL-Forms (JSON Schema enhanced)
+## API Resource Collections
+
+### 1. Get Data with HAL-Forms (JSON Schema enhanced)
    
 Request
 ```
-GET /employees HTTP/1.1
+GET /api/v1/employees HTTP/1.1
 Accept: application/prs.hal-forms+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -76,7 +78,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
             "href": "http://example.com/employees/1"
           },
           "leavesCompany": {
-            "href": "http://example.com/employees/1"
+            "href": "http://example.com/api/v1/employees/1"
           }
         }
       },
@@ -85,10 +87,10 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
   },
   "_links": {
     "self": {
-      "href": "http://example.com/employees?page=1"
+      "href": "http://example.com/api/v1/employees?page=1"
     },
     "next": {
-      "href": "http://example.com/employees?page=2"
+      "href": "http://example.com/api/v1/employees?page=2"
     }
   },
   "_templates": {
@@ -97,7 +99,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
       "method": "GET",
       "contentType": "application/x-www-form-urlencoded",
       "jsonSchema": {
-        "$id": "http://example.com/api/employees#employee",
+        "$id": "http://example.com/api/v1/employees#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "properties": {
@@ -115,7 +117,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
       "method": "POST",
       "contentType": "application/json",
       "jsonSchema": {
-        "$id": "http://example.com/api/employees#employee",
+        "$id": "http://example.com/api/v1/employees#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "required": [
@@ -147,20 +149,19 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 }
 ```
 
-## 2. Get employee's JSON Validation Schema
-In the response of `_templates`'s `jsonSchema` SHOULD have either and 
-Canonical URI of a schema (`$id`)
+### 2. Get employee's JSON Validation Schema
+Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`
 
 ```
 "jsonSchema": {
-    "$id": "http://example.com/api/employees#employee"
+    "$id": "http://example.com/api/v1/employees#employee"
     ...
 }
 ```
 
 Request
 ```
-GET /employees HTTP/1.1
+GET /api/v1/employees HTTP/1.1
 Accept: application/schema+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -171,7 +172,7 @@ Cache-Control: max-age=3600;
 Etag: x123dfff
 
 {
-  "$id": "http://example.com/api/employees",
+  "$id": "http://example.com/api/v1/employees",
   "$schema": "https://json-schema.org/draft/2019-09/schema",  "$defs": {
     "employee": {
         "$anchor": "employee",
@@ -230,12 +231,11 @@ Etag: x123dfff
 }
 ```
 
-
-## 3. Get more employees (next page) 
+### 3. Get more employees (next page) 
    
 Request
 ```
-GET /employees HTTP/1.1
+GET /api/v1/employees HTTP/1.1
 Accept: application/hal+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -254,7 +254,7 @@ Content-Type: application/hal+json; charset=utf-8;
         "status": "PERMANENT",
         "_links": {
           "self": {
-            "href": "http://example.com/employees/21"
+            "href": "http://example.com/api/v1/employees/21"
           }
         }
       },
@@ -263,40 +263,38 @@ Content-Type: application/hal+json; charset=utf-8;
   },
   "_links": {
     "prev": {
-      "href": "http://example.com/employees?page=1"
+      "href": "http://example.com/api/v1/employees?page=1"
     },
     "self": {
-      "href": "http://example.com/employees?page=2"
+      "href": "http://example.com/api/v1/employees?page=2"
     },
     "next": {
-      "href": "http://example.com/employees?page=3"
+      "href": "http://example.com/api/v1/employees?page=3"
     }
   }
 }
 ```
 
-Example API [/api/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/employees.yaml)
+Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 
-## Read Only
+### Collection Sequence Diagram
 <div class="diagram">
 Note over Consumer: 1. Read Employees (With HAL Form)
-Consumer->Provider: GET /employees\n[application/prs.hal-forms+json]
+Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
 Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: JSON Data
 
 Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
-Consumer->Provider: GET /employees\n[application/schema+json]
+Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
 Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
 Provider-->Consumer: 200: JSON Schema
 
 Note over Consumer: 3. Read next Employees (without HAL Form)
-Consumer->Provider: GET /employees?page=2\n[application/prs.hal-forms+json]
+Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
 Note right of Provider: Collection of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
 </div>
 
-
-With the retieved JSON data (collection of employees) and JSON Schema (of Employees)
 
 ### Example UI
 
@@ -305,7 +303,7 @@ ___
 <div class="btn btn-green">add employee</div>
 <span class="tooltip"> 1 
 <span class="tooltiptext tooltip-top">
-Response of GET /employees<br>
+Response of GET /api/v1/employees<br>
 Accept: application/schema+json
 </span>
 </span>
@@ -317,7 +315,7 @@ Accept: application/schema+json
       <th style="text-align: left">Firstname
         <span class="tooltip"> 1
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span>
@@ -325,7 +323,7 @@ Accept: application/schema+json
       <th style="text-align: left">Lastname<
         <span class="tooltip"> 1
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span>
@@ -333,7 +331,7 @@ Accept: application/schema+json
       <th style="text-align: left">Date of birth
         <span class="tooltip"> 1
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span>
@@ -341,7 +339,7 @@ Accept: application/schema+json
       <th style="text-align: left">Status
         <span class="tooltip"> 1
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span>
@@ -349,7 +347,7 @@ Accept: application/schema+json
       <th style="text-align: center">Actions
         <span class="tooltip"> 1 
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span>
@@ -366,13 +364,268 @@ Accept: application/schema+json
       <td style="text-align: center">
       <div class="btn btn-red">remove</div><span class="tooltip"> 2
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span>
       <div class="btn btn-blue">edit</div><span class="tooltip"> 2
         <span class="tooltiptext tooltip-top">
-        Response of GET /employees</br>
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td style="text-align: left">Mary</td>
+      <td style="text-align: left">Major</td>
+      <td style="text-align: left">2000-02-28</td>
+      <td style="text-align: left">Gekündigt</td>
+      <td style="text-align: center"><div class="btn btn-blue">edit</div></td>
+    </tr>
+  </tbody>
+</table>
+
+## Specific API Resource
+
+### 1. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
+   
+Request
+```
+GET /api/v1/employees/1 HTTP/1.1
+Accept: application/prs.hal-forms+json; charset=utf-8;
+Accept-Language: en; fr;q=0.9, de;q=0.8
+```
+Response
+```
+Content-Type: application/prs.hal-forms+json; charset=utf-8;
+
+{
+    "id": 1,
+    "firstName": "John",
+    "lastName": "string",
+    "birthday": "2000-12-31",
+    "status": "PART-TIME",
+    "_links": {
+        "self": {
+        "href": "http://example.com/employees/1"
+        },
+        "leavesCompany": {
+        "href": "http://example.com/api/v1/employees/1"
+        }
+    },
+    "_links": {
+        "self": {
+            "href": "http://example.com/api/v1/employees?page=1"
+        },
+        "next": {
+            "href": "http://example.com/api/v1/employees?page=2"
+        }
+    },
+    "_templates": {
+        "addEmployee": {
+        "title": "Edit Employee",
+        "method": "PATCH",
+        "contentType": "application/json",
+        "jsonSchema": {
+            "$id": "http://example.com/api/v1/employees#employee",
+            "$schema": "https://json-schema.org/draft/2019-09/schema",
+            "type": "object",
+            "required": [
+            "firstName",
+            "lastName",
+            ],
+            "properties": {
+                "firstName": {
+                },
+                "lastName": {
+                },
+                "status": {
+                    "oneOf": [
+                    {
+                        "const": "PART-TIME"
+                    },{
+                        "const": "PERMANENT"
+                    }
+                    ]
+                }
+            }
+        }
+        }
+    }
+}
+```
+
+### 2. Get employee's JSON Validation Schema
+Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`
+
+```
+"jsonSchema": {
+    "$id": "http://example.com/api/v1/employees#employee"
+    ...
+}
+```
+
+Request
+```
+GET /api/v1/employees HTTP/1.1
+Accept: application/schema+json; charset=utf-8;
+Accept-Language: en; fr;q=0.9, de;q=0.8
+If-None-Match: x123dfff
+```
+Response
+```
+HTTP 304
+Content-Type: application/schema+json; charset=utf-8;
+Cache-Control: max-age=3100;
+Etag: x123dfff
+```
+
+### 3. Get more employees (next page) 
+   
+Request
+```
+GET /api/v1/employees/1 HTTP/1.1
+Accept: application/hal+json; charset=utf-8;
+Accept-Language: en; fr;q=0.9, de;q=0.8
+```
+Response
+```
+Content-Type: application/hal+json; charset=utf-8;
+
+{
+  "_embedded": {
+    "employees": [
+      {
+        "id": 21,
+        "firstName": "Mary",
+        "lastName": "Moe",
+        "birthday": "1999-02-28",
+        "status": "PERMANENT",
+        "_links": {
+          "self": {
+            "href": "http://example.com/api/v1/employees/21"
+          }
+        }
+      },
+      {...}
+    ]
+  },
+  "_links": {
+    "prev": {
+      "href": "http://example.com/api/v1/employees?page=1"
+    },
+    "self": {
+      "href": "http://example.com/api/v1/employees?page=2"
+    },
+    "next": {
+      "href": "http://example.com/api/v1/employees?page=3"
+    }
+  }
+}
+```
+
+Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
+
+### Collection Sequence Diagram
+<div class="diagram">
+Note over Consumer: 1. Read Employees (With HAL Form)
+Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
+Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
+Provider-->Consumer: 200: JSON Data
+
+Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
+Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
+Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
+Provider-->Consumer: 304: Not Modified
+
+Note over Consumer: 3a. Update Employee (With HAL Form)
+Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
+Note right of Provider: Collection of Employees\nwith HAL Links
+Provider-->Consumer: 200: JSON Data
+
+Note over Consumer: 3b. Update Employee (Without HAL Form)
+Consumer->Provider: GET /api/v1/employees?page=2\n[application/json]
+Note right of Provider: Collection of Employees\nwith HAL Links
+Provider-->Consumer: 200: JSON Data
+</div>
+
+
+### Example UI
+
+#### Employees
+___
+<div class="btn btn-green">add employee</div>
+<span class="tooltip"> 1 
+<span class="tooltiptext tooltip-top">
+Response of GET /api/v1/employees<br>
+Accept: application/schema+json
+</span>
+</span>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th style="text-align: left">Firstname
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: left">Lastname<
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: left">Date of birth
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: left">Status
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: center">Actions
+        <span class="tooltip"> 1 
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td style="text-align: left">John</td>
+      <td style="text-align: left">Doe</td>
+      <td style="text-align: left">1967-12-22</td>
+      <td style="text-align: left">Festangestellt</td>
+      <td style="text-align: center">
+      <div class="btn btn-red">remove</div><span class="tooltip"> 2
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      <div class="btn btn-blue">edit</div><span class="tooltip"> 2
+        <span class="tooltiptext tooltip-top">
+        Response of GET /api/v1/employees</br>
         Accept: application/schema+json
         </span>
         </span></td>
