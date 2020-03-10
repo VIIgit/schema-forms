@@ -69,7 +69,7 @@ n/a | `oneOf`
 n/a | `anyOf`
 n/a | `maxItems`
 n/a | `minItems`
-|| [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
+| [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
 
 # Workflow Examples
 
@@ -227,13 +227,13 @@ Etag: x123dfff
                 "oneOf": [
                     {
                         "const": "PART-TIME",
-                        "title": "Teilzeit"
+                        "title": "Part-time"
                     },{
                         "const": "PERMANENT",
-                        "title": "Festangestellt"
+                        "title": "Permanent"
                     },{
                         "const": "RESIGNED",
-                        "title": "Gekündigt"
+                        "title": "Resigned"
                     }
                 ]
             }
@@ -335,42 +335,38 @@ Accept: application/schema+json
 </span>
 </span>
 
+___
+
+<form action="">
+  <label for="fname">First name</label>
+  <input type="search" id="fname" name="fname"><br>
+  <label for="lname">Last name</label>
+  <input type="search" id="lname" name="lname"><br>
+  <label for="status">Status</label>
+  <input list="status" name="status">
+  <datalist id="status">
+    <option value="Part-time">
+    <option value="Permanent">
+  </datalist><br><br>
+  <input type="submit" value="search">
+    <span class="tooltip"> 1
+    <span class="tooltiptext tooltip-top">
+    Response of GET /api/v1/employees</br>
+    Accept: application/schema+json
+    </span>
+    </span>
+</form>
+
+___
+
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th style="text-align: left">Firstname
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: left">Lastname<
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: left">Date of birth
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: left">Status
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
+      <th style="text-align: left">Firstname</th>
+      <th style="text-align: left">Lastname</th>
+      <th style="text-align: left">Date of birth</th>
+      <th style="text-align: left">Status</th>
       <th style="text-align: center">Actions
         <span class="tooltip"> 1 
         <span class="tooltiptext tooltip-top">
