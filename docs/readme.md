@@ -226,46 +226,26 @@ Content-Type: application/hal+json; charset=utf-8;
 }
 ```
 
-
-
 Example API [/api/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/employees.yaml)
 
 ## Read Only
 <div class="diagram">
-Note over Consumer: 1. Read localized JSON Schema\nof Employees
-Consumer->Provider: GET /employees\nAccept application/schema+json
-Note right of Provider: Localized static JSON\nof the Employee Resource\nwith an ETag Header
-Note right of Provider: Depends on `Cache-Control`
-Provider-->Consumer: 304: Not modified
-Note right of Provider: or
+Note over Consumer: 1. Read Employees (With HAL Form)
+Consumer->Provider: GET /employees\n[application/prs.hal-forms+json]
+Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
+Provider-->Consumer: 200: JSON Data
+
+Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
+Consumer->Provider: GET /employees\n[application/schema+json]
+Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
 Provider-->Consumer: 200: JSON Schema
-Note over Consumer: 2. Read Employees (Read only)
-Consumer->Provider: GET /employees\nAccept application/hal+json
-Note right of Provider: Collection of Employees\nwith HAL links
-Provider-->Consumer: JSON Data
+
+Note over Consumer: 3. Read next Employees (without HAL Form)
+Consumer->Provider: GET /employees?page=2\n[application/prs.hal-forms+json]
+Note right of Provider: Collection of Employees\nwith HAL Links
+Provider-->Consumer: 200: JSON Data
 </div>
 
-With the retieved JSON data (collection of employees) and JSON Schema (of Employees)
-
-| ID  | Firstname | Lastname | Date of birth | Status         |
-| --- | :---      | :---     | :---          | :---           |
-| 1   | John      | Doe      | 1967-12-22    | Festangestellt |
-| 2   | Mary      | Major    | 2000-02-28    | Gekündigt      |
-
-## Read Only
-<div class="diagram">
-Note over Consumer: 1. Read localized JSON Schema\nof Employees
-Consumer->Provider: GET /employees\nAccept application/schema+json
-Note right of Provider: Localized static JSON\nof the Employee Resource\nwith an ETag Header
-Note right of Provider: Depends on `Cache-Control`
-Provider-->Consumer: 304: Not modified
-Note right of Provider: or
-Provider-->Consumer: 200: JSON Schema
-Note over Consumer: 2. Filtering and/or adding Employees
-Consumer->Provider: GET /employees\nAccept application/prs.hal-forms+json
-Note right of Provider: Collection of Employees with\n- HAL links\n- HAL-Form's templates
-Provider-->Consumer: JSON Data
-</div>
 
 With the retieved JSON data (collection of employees) and JSON Schema (of Employees)
 
@@ -273,21 +253,58 @@ With the retieved JSON data (collection of employees) and JSON Schema (of Employ
 
 #### Employees
 ___
-<div class="btn btn-green"> add employee
+<div class="btn btn-green">add employee</div>
 <span class="tooltip"> 1 
-    <span class="tooltiptext tooltip-top">Response of GET /employees<br>
-Accept: application/schema+json</span>
+<span class="tooltiptext tooltip-top">
+Response of GET /employees<br>
+Accept: application/schema+json
 </span>
-</div>
+</span>
+
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th style="text-align: left">Firstname</th>
-      <th style="text-align: left">Lastname</th>
-      <th style="text-align: left">Date of birth</th>
-      <th style="text-align: left">Status</th>
-      <th style="text-align: center">Actions</th>
+      <th style="text-align: left">Firstname
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: left">Lastname<
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: left">Date of birth
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: left">Status
+        <span class="tooltip"> 1
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
+      <th style="text-align: center">Actions
+        <span class="tooltip"> 1 
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -297,7 +314,19 @@ Accept: application/schema+json</span>
       <td style="text-align: left">Doe</td>
       <td style="text-align: left">1967-12-22</td>
       <td style="text-align: left">Festangestellt</td>
-      <td style="text-align: center"><div class="btn btn-red">remove</div><div class="btn btn-blue">edit</div></td>
+      <td style="text-align: center">
+      <div class="btn btn-red">remove</div><span class="tooltip"> 2
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span>
+      <div class="btn btn-blue">edit</div><span class="tooltip"> 2
+        <span class="tooltiptext tooltip-top">
+        Response of GET /employees</br>
+        Accept: application/schema+json
+        </span>
+        </span></td>
     </tr>
     <tr>
       <td>2</td>
