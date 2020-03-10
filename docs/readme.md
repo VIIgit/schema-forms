@@ -338,7 +338,12 @@ Accept: application/schema+json
 ___
 
 <form action="">
-  <label for="fname">First name</label>
+  <label for="fname">First name<span class="tooltip"> 1
+<span class="tooltiptext tooltip-top">
+    Response of GET /api/v1/employees</br>
+    Accept: application/schema+json
+</span>
+</span></label>
   <input type="search" id="fname" name="fname"><br>
   <label for="lname">Last name</label>
   <input type="search" id="lname" name="lname"><br>
@@ -349,12 +354,6 @@ ___
     <option value="Permanent">
   </datalist><br><br>
   <input type="submit" value="search">
-    <span class="tooltip"> 1
-    <span class="tooltiptext tooltip-top">
-    Response of GET /api/v1/employees</br>
-    Accept: application/schema+json
-    </span>
-    </span>
 </form>
 
 ___
