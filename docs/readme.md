@@ -586,23 +586,6 @@ Response of GET /api/v1/employees<br>
 Accept: application/schema+json
 </span>
 </span>
-
-___
-
-<form action="">
-  <label for="fname">First name:</label>
-  <input type="search" id="fname" name="fname"><br>
-  <label for="lname">Last name:</label>
-  <input type="search" id="lname" name="lname"><br>
-  <label for="browser">Status name:</label>
-  <input list="browsers" name="browser">
-  <datalist id="browsers">
-    <option value="Internet Explorer">
-    <option value="Firefox">
-  </datalist><br><br>
-  <input type="submit" value="Submit">
-</form>
-
 ___
 
 <table>
