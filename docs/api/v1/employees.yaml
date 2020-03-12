@@ -1,18 +1,23 @@
 openapi: 3.0.0
 info:
-  title: employees
+  title: A HAL-Form extension with JSON Validation Schema
   version: '1.0.0-SNAPSHOT'
   description: |
-    https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas
+    Examples described at [https://viigit.github.io/schema-forms](https://viigit.github.io/schema-forms/)
 tags:
-  - name: default
-    description: ""
+  - name: Collection Workflows
+    description: "example workflow 1-5"
+  - name: Resource Workflows
+    description: "example workflow 6-8"
 servers:
   - url: 'http://example.com/api/v1'
 paths:
   /employees:
     get:
       summary: List of Employees
+      operationId: get-employees
+      tags:
+      - Collection Workflows
       responses:
         '200':
           description: OK
@@ -26,51 +31,16 @@ paths:
             application/hal+json:
               schema:
                 $ref: '#/components/schemas/Employees'
-            application/prs.hal-forms+json; profile=schema:
+            application/prs.hal-forms+json:
               schema:
                 $ref: '#/components/schemas/EmployeesTemplates'
             application/schema+json:
               schema:
-                type: object
-              examples:
-                Static cacheable schema:
-                  description:
-                    "Static localized JSON Schema   
-                    
-                    _Remark: Should be modelled strictly. Example Value displays also $$ref, which is just a side-effect _"
-                  value:
-                    $id: "http://example.com/api/employees"
-                    $schema: "https://json-schema.org/draft/2019-09/schema"
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 1        
-                      firstName:
-                        type: string
-                        example: John
-                        minLength: 1
-                      lastName:
-                        type: string
-                        example: Doe
-                        minLength: 1
-                      birthday:
-                        type: string
-                        format: date
-                      status:
-                        type: string
-                        oneOf:
-                        - const: PART-TIME
-                          title: Teilzeit
-                        - const: PERMANENT
-                          title: Festangestellt
-                        - const: RESIGNED
-                          title: Gekündigt
-
-        
-      operationId: get-employees
+                $ref: '#/components/schemas/EmployeesJsonSchema'
     post:
       summary: 'Register employee'
+      tags:
+        - Collection Workflows
       operationId: post-employees
       responses:
         '201':
@@ -103,12 +73,16 @@ paths:
         required: true
     get:
       summary: Details of an Employee
+      tags:
+        - Resource Workflows
       operationId: get-employees-id
       responses:
         '200':
           description: Created
     patch:
       summary: Update Employee
+      tags:
+        - Resource Workflows
       operationId: patch-employees-id
       requestBody:
         content:
@@ -133,13 +107,14 @@ paths:
 
     delete:
       summary: Remove Employee
+      tags:
+        - Resource Workflows
       operationId: delete-employees-id
       responses:
         '204':
           description: Removed
 
 components:
-  
 
   schemas:
 
@@ -369,3 +344,32 @@ components:
             example: "https://json-schema.org/draft/2019-09/schema"
       - $ref: "#/components/schemas/Employee"
       
+    EmployeesJsonSchema:
+      example:
+        $id: "http://example.com/api/employees"
+        $schema: "https://json-schema.org/draft/2019-09/schema"
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1        
+          firstName:
+            type: string
+            example: John
+            minLength: 1
+          lastName:
+            type: string
+            example: Doe
+            minLength: 1
+          birthday:
+            type: string
+            format: date
+          status:
+            type: string
+            oneOf:
+            - const: PART-TIME
+              title: Teilzeit
+            - const: PERMANENT
+              title: Festangestellt
+            - const: RESIGNED
+              title: Gekündigt

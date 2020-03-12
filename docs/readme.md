@@ -9,9 +9,15 @@ A backward-compatible extension for ) to provide support dynamic runtime input f
 # Motivation
 [HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as the attributes needed for each operation.
 
-Sometimes more complex UI Validation is required than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]` to be able to submit a valid form.
+Sometimes more complex UI Validation is required than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]` to be able to submit a valid form. Giving the consumer of an API more options to validate a request before they submit it, increases the user expirience and saves server round-trips.
 
 The motivation is to combine and extend HAL-Forms with  JSON-Schema and provide a localized, cacheable JSON Validation Schema to make API even more enjoyable to consume (I _LOVE**OAS**_).
+
+JSON Schema is a popular standards for API Model specification and has many libraries which are make use of it e.g.:
+- JSON Schema Code Generators ( for Java, Python, ...)
+- JSON Schema Forms ( https://github.com/rjsf-team/react-jsonschema-form ) 
+- JSON Schema Validators (Ajv,...)
+- JSON Schema Example Generators (FakerJs, ...)
 
 # Extention of HAL Forms
 ## Compliance
@@ -70,30 +76,33 @@ n/a | `maxItems`, `minItems`, `uniqueItems`, ...
 n/a | `writeOnly`, ...
 *n/a | `title`, `description` UI agnostic, but COULD be used as Label, Tooltip, ...
 **Keywords for Applying Subschemas:** |
-n/a | `oneOf`, `anyOf` of Objects
-n/a | `oneOf` of options ( localized complex enum)
+n/a | `oneOf`, `anyOf` at Object level
+n/a | `oneOf` type(e.g. string) level options (localized complex `enum`)
+n/a | `if`, `then`, `else`, `dependentSchemas` conditional subschema
 n/a | [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
 
 # Workflow Examples
 
+## API Resource Collections
+
+This examples shows a possible workflows about getting Collection of Records with it's form templates and dynamic json schemas:
+
 <div class="diagram">
 Note over Consumer: 1. Read Employees (With HAL Form)
 Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
-Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
+Note right of Provider: 1st page of Employees\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: JSON Data
 
 Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
 Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
+Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\n`Cache-Control` Header
 Provider-->Consumer: 200: JSON Schema
 
 Note over Consumer: 3. Read next Employees (without HAL Form)
-Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
-Note right of Provider: Collection of Employees\nwith HAL Links
+Consumer->Provider: GET /api/v1/employees?page=2\n[application/hal+json]
+Note right of Provider: 2nd page of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
 </div>
-
-## API Resource Collections
 
 ### 1. Get Data with HAL-Forms (JSON Schema enhanced)
    
@@ -326,8 +335,6 @@ Content-Type: application/hal+json; charset=utf-8;
 
 Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 
-
-
 ### Example UI
 
 #### Employees
@@ -358,7 +365,7 @@ ___
     <option value="Part-time"></option>
     <option value="Permanent"></option>
   </datalist><br><br>
-  <input type="submit" value="search">
+  <input type="submit" value="search" class="btn btn-blue">
 </form>
 
 <table>
@@ -680,7 +687,10 @@ ___
   - [https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
   - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 -  Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
+-  Spring Affordance HATEOAS [https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas](https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas)
+
 - This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
+
 
 <script> 
     var options = {theme: 'simple'};
