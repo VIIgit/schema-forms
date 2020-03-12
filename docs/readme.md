@@ -22,56 +22,76 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 - `jsonSchema`
   
-  This is a valid JSON Validation Schema. This is an OPTIONAL element. 
-  - The JSON Validation Schema MAY has a canonical URI of a schema (`$id`) to identify and MAY get the full localized and cacheabke JSON Validation Schema.
+    - This is a valid JSON Validation Schema. 
+    - This is an OPTIONAL element.
+    - The JSON Validation Schema MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees#employee"`)
+    - MAY contains the referred Schema or a dynamic subset depends on the context of the user(differenet rights to modify), state of record (acitve, final state) or on operation (GET, POST, PATCH, ... )
+    - SHOULD be the localized
+    - if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
+    
     Example:
     ```
-    "jsonSchema": {
-        "$id": "http://example.com/api/v1/employees#employee",
-        "$schema": "https://json-schema.org/draft/2019-09/schema",
-        "type": "object",
-        "properties": {
-           ...
+    "_templates" : {
+        "default" : {
+            "title" : "Filter",
+            "method":"GET",
+            "contentType": "application/x-www-form-urlencoded",
+            "jsonSchema": {
+                "$id": "http://example.com/api/v1/employees",
+                "$schema": "https://json-schema.org/draft/2019-09/schema",
+                "type": "object",
+                "properties": {
+                    ...
+                }
+            }
         }
     }
     ```
-  - The JSON Validation Schema SHOULD define ...
-    Example:
-    ```
-    "jsonSchema": {
-        "$id": "http://example.com/api/v1/employees#employee",
-        "$schema": "https://json-schema.org/draft/2019-09/schema",
-        "type": "object",
-        "properties": {
-           ...
-        }
-    }
-    ```
-- `properties`
-  
-  if `jsonSchema` is present then `properties` becomes obsolete.
+### Validation Options
 
 Comparison between HAL Forms `_templates..properties` and JSON Validation Schema
 
-properties | JSON Schema alternative
+_template.properties | JSON Schema alternative
 :--- | :---
 `name` | attribute's name
 `prompt` | `example` 
-`readOnly` | `readOnly`
-`regex` | `pattern`
-`required` | `required`
-`templated` | ``
+`templated` | n/a
 `value` | `default`
-n/a | `title`
-n/a | `description`
-n/a | `type`
-n/a | `oneOf`
-n/a | `anyOf`
-n/a | `maxItems`
-n/a | `minItems`
-| [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
+**Validation Keywords for Strings:** |
+`regex` | `pattern`
+`regex` | `minLength`, `maxLength`, ...
+**Validation Keywords for Objects:** |
+`required` | `required`
+n/a | `dependentRequired`
+**Validation Keywords for Arrays:** |
+n/a | `maxItems`, `minItems`, `uniqueItems`, ...
+**Basic Meta-Data Annotations:** |
+`readOnly` | `readOnly`
+n/a | `writeOnly`, ...
+*n/a | `title`, `description` UI agnostic, but COULD be used as Label, Tooltip, ...
+**Keywords for Applying Subschemas:** |
+n/a | `oneOf`, `anyOf` of Objects
+n/a | `oneOf` of options ( localized complex enum)
+n/a | [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
 
 # Workflow Examples
+
+<div class="diagram">
+Note over Consumer: 1. Read Employees (With HAL Form)
+Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
+Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
+Provider-->Consumer: 200: JSON Data
+
+Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
+Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
+Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
+Provider-->Consumer: 200: JSON Schema
+
+Note over Consumer: 3. Read next Employees (without HAL Form)
+Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
+Note right of Provider: Collection of Employees\nwith HAL Links
+Provider-->Consumer: 200: JSON Data
+</div>
 
 ## API Resource Collections
 
@@ -193,8 +213,10 @@ Response
 ```
 HTTP 200
 Content-Type: application/schema+json; charset=utf-8;
-Cache-Control: max-age=3600;
+Content-Language: en
+Cache-Control: max-age=3600
 Etag: x123dfff
+Vary: Accept-Language
 
 {
   "$id": "http://example.com/api/v1/employees",
@@ -304,23 +326,6 @@ Content-Type: application/hal+json; charset=utf-8;
 
 Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 
-### Collection Sequence Diagram
-<div class="diagram">
-Note over Consumer: 1. Read Employees (With HAL Form)
-Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
-Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
-Provider-->Consumer: 200: JSON Data
-
-Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
-Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
-Provider-->Consumer: 200: JSON Schema
-
-Note over Consumer: 3. Read next Employees (without HAL Form)
-Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
-Note right of Provider: Collection of Employees\nwith HAL Links
-Provider-->Consumer: 200: JSON Data
-</div>
 
 
 ### Example UI
@@ -498,8 +503,10 @@ Response
 ```
 HTTP 304
 Content-Type: application/schema+json; charset=utf-8;
+Content-Language: en
 Cache-Control: max-age=3100;
 Etag: x123dfff
+Vary: Accept-Language
 ```
 
 ### 3. Get more employees (next page) 
@@ -664,13 +671,14 @@ ___
   </tbody>
 </table>
 
-
 # References
 - HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
 - The home of JSON Schema [https://json-schema.org](https://json-schema.org)
   - Canonical URI of a schema (`$id`) [JSON Schema 2019-09](https://json-schema.org/draft/2019-09/json-schema-core.html)
 - Inspired by [APIs you won't hate](https://apisyouwonthate.com/blog/lets-stop-building-apis-around-a-network-hack)
-- ETag [Cache-Control](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
+- ETag, Cache-Control 
+  - [https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
+  - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 -  Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
 - This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
 
