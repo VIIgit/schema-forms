@@ -151,6 +151,9 @@ components:
           type: string
           format: date
           example: "2000-12-31"
+        email:
+          type: string
+          format: email
         status:
           type: string
           enum:
@@ -204,6 +207,10 @@ components:
                         type: string
                         format: date
                         example: 2000-12-31
+                      email:
+                        type: string
+                        format: email
+                        example: john.doe@example.com
                       status:
                         type: string
                         oneOf:
@@ -262,6 +269,10 @@ components:
                           type: string
                           format: date
                           example: 2000-12-31
+                        email:
+                          type: string
+                          format: email
+                          example: john.doe@example.com
                         status:
                           type: string
                           oneOf:
@@ -364,6 +375,9 @@ components:
           birthday:
             type: string
             format: date
+          email:
+            type: string
+            format: email
           status:
             type: string
             oneOf:

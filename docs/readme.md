@@ -4,16 +4,16 @@
 <script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
 
-A backward-compatible extension for ) to provide support dynamic runtime input forms with JSON Schema 
+A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide support dynamic runtime input forms with JSON Schema 
 
 # Motivation
-[HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as the attributes needed for each operation.
+[HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as attributes needed for each operation.
 
 Sometimes more complex UI Validation is required than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]` to be able to submit a valid form. Giving the consumer of an API more options to validate a request before they submit it, increases the user expirience and saves server round-trips.
 
-The motivation is to combine and extend HAL-Forms with  JSON-Schema and provide a localized, cacheable JSON Validation Schema to make API even more enjoyable to consume (I _LOVE**OAS**_).
+The motivation is to combine and extend HAL-Forms with  JSON-Schema and to provide a localized, cacheable JSON Validation Schema to make the API even more user-friendly always (I _LOVE**OAS**_).
 
-JSON Schema is a popular standards for API Model specification and has many libraries which are make use of it e.g.:
+JSON schema is a popular standard for the API model specification and has many libraries that make use of it e.g.:
 - JSON Schema Code Generators ( for Java, Python, ...)
 - JSON Schema Forms ( https://github.com/rjsf-team/react-jsonschema-form ) 
 - JSON Schema Validators (Ajv,...)
@@ -24,15 +24,15 @@ JSON Schema is a popular standards for API Model specification and has many libr
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119].
 ## Definition
 
-[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `template` element contains a optional `jsonSchema` attribute.
+[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `template` element contains an additional `jsonSchema` attribute.
 
 - `jsonSchema`
   
-    - This is a valid JSON Validation Schema. 
+    - This is a valid JSON Validation Schema.
     - This is an OPTIONAL element.
-    - The JSON Validation Schema MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees#employee"`)
-    - MAY contains the referred Schema or a dynamic subset depends on the context of the user(differenet rights to modify), state of record (acitve, final state) or on operation (GET, POST, PATCH, ... )
-    - SHOULD be the localized
+    - The JSON Validation Schema MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
+    - MAY contain the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) or the operation (GET, POST, PATCH, ...).
+    - SHOULD be the localized (`title`, `description`, ...)
     - if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
     
     Example:
@@ -60,7 +60,7 @@ Comparison between HAL Forms `_templates..properties` and JSON Validation Schema
 _template.properties | JSON Schema alternative
 :--- | :---
 `name` | attribute's name
-`prompt` | `example` 
+`prompt` | MAY `example` 
 `templated` | n/a
 `value` | `default`
 **Validation Keywords for Strings:** |
@@ -85,20 +85,27 @@ n/a | [many more...](https://json-schema.org/draft/2019-09/json-schema-validatio
 
 ## API Resource Collections
 
-This examples shows a possible workflows about getting Collection of Records with it's form templates and dynamic json schemas:
+This example shows possible workflows to get the collection of records with their form templates and dynamic JSON schemas:
 
 <div class="diagram">
-Note over Consumer: 1. Read Employees (With HAL Form)
+Note over Consumer: 1. Read Employees\nwith HAL Forms
 Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
 Note right of Provider: 1st page of Employees\nwith HAL Links\nwith HAL Forms
-Provider-->Consumer: 200: JSON Data
+Provider-->Consumer: 200: Ok (JSON Data)
 
-Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
+Note over Consumer: 2. GET `jsonSchema`
 Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\n`Cache-Control` Header
-Provider-->Consumer: 200: JSON Schema
+Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\nwith `Cache-Control` Header
+Provider-->Consumer: 200: Ok (JSON Schema)
 
-Note over Consumer: 3. Read next Employees (without HAL Form)
+Note over Consumer: 3. Add new Employee\nwith HAL Forms
+Consumer->Provider: POST /api/v1/employees\n[application/prs.hal-forms+json]
+Note right of Provider: a)Created Employees\nwith HAL Link\nwith HAL Forms
+Provider-->Consumer: 201: Created (JSON Data)
+Note right of Provider: b) or\nwith validation failures\n\nwith updated HAL Forms
+Provider-->Consumer: 400: Bad request (JSON Data)
+
+Note over Consumer: 4. Read next Employees\nwithout HAL Form
 Consumer->Provider: GET /api/v1/employees?page=2\n[application/hal+json]
 Note right of Provider: 2nd page of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
@@ -125,6 +132,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
         "firstName": "John",
         "lastName": "string",
         "birthday": "2000-12-31",
+        "email": "john.doe@example.com",
         "status": "PART-TIME",
         "_links": {
           "self": {
@@ -185,6 +193,8 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
           },
           "birthday": {
           },
+          "email": {
+          },
           "status": {
             "oneOf": [
               {
@@ -203,7 +213,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 ```
 
 ### 2. Get employee's JSON Validation Schema
-Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`
+Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
 ```
 "jsonSchema": {
@@ -253,6 +263,10 @@ Vary: Accept-Language
                 "type": "string",
                 "format": "date"
             },
+            "email": {
+                "type": "string",
+                "format": "email"
+            },
             "status": {
                 "type": "string",
                 "oneOf": [
@@ -288,8 +302,10 @@ Vary: Accept-Language
 }
 ```
 
-### 3. Get more employees (next page) 
-   
+### 4. Get more employees (next page)
+
+A HAL form is usually required for the first request. The HAL form can be omitted in subsequent request.
+
 Request
 ```
 GET /api/v1/employees HTTP/1.1
@@ -309,6 +325,7 @@ Content-Type: application/hal+json; charset=utf-8;
         "firstName": "Mary",
         "lastName": "Moe",
         "birthday": "1999-02-28",
+        "email": "mary.moe@example.com",
         "status": "PERMANENT",
         "_links": {
           "self": {
@@ -335,89 +352,6 @@ Content-Type: application/hal+json; charset=utf-8;
 
 Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 
-### Example UI
-
-#### Employees
-___
-<div class="btn btn-green">add employee</div>
-<span class="tooltip"> 1 
-<span class="tooltiptext tooltip-top">
-Response of GET /api/v1/employees<br>
-Accept: application/schema+json
-</span>
-</span>
-
-___
-
-<form action="">
-  <label for="fname">First name<span class="tooltip"> 1
-<span class="tooltiptext tooltip-top">
-    Response of GET /api/v1/employees</br>
-    Accept: application/schema+json
-</span>
-</span></label>
-  <input type="search" id="fname" name="fname"><br>
-  <label for="lname">Last name</label>
-  <input type="search" id="lname" name="lname"><br>
-  <label for="status">Status</label>
-  <input list="status" name="status">
-  <datalist id="status">
-    <option value="Part-time"></option>
-    <option value="Permanent"></option>
-  </datalist><br><br>
-  <input type="submit" value="search" class="btn btn-blue">
-</form>
-
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th style="text-align: left">Firstname</th>
-      <th style="text-align: left">Lastname</th>
-      <th style="text-align: left">Date of birth</th>
-      <th style="text-align: left">Status</th>
-      <th style="text-align: center">Actions
-        <span class="tooltip"> 1 
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td style="text-align: left">John</td>
-      <td style="text-align: left">Doe</td>
-      <td style="text-align: left">1967-12-22</td>
-      <td style="text-align: left">Festangestellt</td>
-      <td style="text-align: center">
-      <div class="btn btn-red">remove</div><span class="tooltip"> 2
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      <div class="btn btn-blue">edit</div><span class="tooltip"> 2
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span></td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td style="text-align: left">Mary</td>
-      <td style="text-align: left">Major</td>
-      <td style="text-align: left">2000-02-28</td>
-      <td style="text-align: left">Gekündigt</td>
-      <td style="text-align: center"><div class="btn btn-blue">edit</div></td>
-    </tr>
-  </tbody>
-</table>
-
 ## Specific API Resource
 
 ### 1. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
@@ -436,8 +370,9 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 {
     "id": 1,
     "firstName": "John",
-    "lastName": "string",
+    "lastName": "doe",
     "birthday": "2000-12-31",
+    "email": "john.doe@example.com",
     "status": "PART-TIME",
     "_links": {
         "self": {
@@ -537,6 +472,7 @@ Content-Type: application/hal+json; charset=utf-8;
         "firstName": "Mary",
         "lastName": "Moe",
         "birthday": "1999-02-28",
+        "email": "mary.moe@example.com",
         "status": "PERMANENT",
         "_links": {
           "self": {
