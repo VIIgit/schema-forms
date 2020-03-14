@@ -37,6 +37,7 @@ paths:
             application/schema+json:
               schema:
                 $ref: '#/components/schemas/EmployeesJsonSchema'
+                
     post:
       summary: 'Register employee'
       tags:
@@ -46,24 +47,76 @@ paths:
         '201':
           description: Created
           content:
-            application/json:
-              schema:
+            application/hal+json:
+              schema:      
                 type: object
-                properties: {}
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/EmployeeLink"
+            application/prs.hal-forms+json:
+              schema:
+                $ref: '#/components/schemas/EmployeesTemplates'
         '400':
-          description: Bad Request
+          description: |
+            Bad Request
+            - application/problem+json [IETF rfc 7807](https://tools.ietf.org/rfc/rfc7807.txt)
           content:
-            application/json:
+            application/problem+json:
               schema:
-                type: object
-                properties: {}
+                allOf: 
+                  - $ref: '#/components/schemas/EmployeeValidationError'
+                  - $ref: '#/components/schemas/EmployeeValidationErrorUpdatedForm'
+              examples:
+                adapted Form:
+                  value:
+                    type: https://example.com/validation-error
+                    title: Your request parameters didn't validate.
+                    invalidProperties:
+                      - $id: "#/birthday"
+                        reason: must be in the past
+                      - $id: "#/email"
+                        reason: exists already
+                    _templates:
+                      addEmployee:
+                        title: Add Employee
+                        method: POST
+                        contentType: application/json
+                        jsonSchema:
+                          $id: http://example.com/api/employees
+                          $schema: https://json-schema.org/draft/2019-09/schema
+                          type: object
+                          properties:
+                            id: {}
+                            firstName: {}
+                            lastName: {}
+                            birthday: {}
+                            email:
+                              enum:
+                                - john.doe-01@example.com
+                                - john.doe-a@example.com
+                            status: {}
+
+                just problem+json:
+                  value:
+                    type: https://example.com/validation-error
+                    title: Your request parameters didn't validate.
+                    invalidProperties:
+                      - $id: "#/birthday"
+                        reason: must be in the past
+                      - $id: "#/email"
+                        reason: exists already
+                    
       requestBody:
         content:
+          application/prs.hal-forms+json:
+            schema:
+              $ref: "#/components/schemas/Employee"
           application/json:
             schema:
               $ref: "#/components/schemas/Employee"
               
         description: ''
+        
   '/employees/{id}':
     parameters:
       - schema:
@@ -146,6 +199,7 @@ components:
           minLength: 1
         lastName:
           type: string
+          example: Doe
           minLength: 1
         birthday:
           type: string
@@ -154,6 +208,7 @@ components:
         email:
           type: string
           format: email
+          example: john.doe@example.com
         status:
           type: string
           enum:
@@ -165,7 +220,6 @@ components:
       - $ref: "#/components/schemas/EmployeeId"
       - $ref: "#/components/schemas/Employee"
       - $ref: "#/components/schemas/EmployeeLinks"
-
 
     EmployeeTemplates:
       type: object
@@ -343,19 +397,80 @@ components:
               type: string
               example: 'http://example.com/employees/1'
 
+    EmployeeValidationError:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "https://example.com/validation-error"
+        title:
+          type: string
+          example: "Your request parameters didn't validate."
+        invalidProperties:
+          type: array
+          items:
+            type: object
+            properties:
+              "$id":
+                type: string
+                example: '#/firstName'
+              reason:
+                type: string
+          example:
+            - "$id": "#/birthday"
+              reason: "must be in the past"
+            - "$id": "#/email"
+              reason: "exists already"
+              
+    EmployeeValidationErrorUpdatedForm:
+      type: object
+      properties:
+        _templates:
+          type: object
+          properties:
+            addEmployee:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Add Employee
+                method:
+                  type: string
+                  example: POST
+                contentType: 
+                  type: string
+                  example: application/json
+                jsonSchema:
+                  type: object
+                  example:
+                    $id: "http://example.com/api/employees"
+                    $schema: "https://json-schema.org/draft/2019-09/schema"
+                    type: object
+                    properties:
+                      id: {}
+                      firstName: {}
+                      lastName: {}
+                      birthday: {}
+                      email:
+                        enum: 
+                        - john.doe-01@example.com
+                        - john.doe-a@example.com
+                      status: {}
+
     EmployeesSchema:
       allOf:
-      - type: object
-        properties:
-          $id:
-            type: string
-            example: "http://example.com/api/employees"
-          $schema:
-            type: string
-            example: "https://json-schema.org/draft/2019-09/schema"
-      - $ref: "#/components/schemas/Employee"
-      
+        - type: object
+          properties:
+            $id:
+              type: string
+              example: "http://example.com/api/employees"
+            $schema:
+              type: string
+              example: "https://json-schema.org/draft/2019-09/schema"
+        - $ref: "#/components/schemas/Employee"
+  
     EmployeesJsonSchema:
+      type: object
       example:
         $id: "http://example.com/api/employees"
         $schema: "https://json-schema.org/draft/2019-09/schema"

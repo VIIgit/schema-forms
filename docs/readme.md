@@ -302,6 +302,89 @@ Vary: Accept-Language
 }
 ```
 
+### 3. Submit new Employee Record
+   
+Request
+```
+POST /api/v1/employees HTTP/1.1
+Accept: application/prs.hal-forms+json; charset=utf-8;
+Accept-Language: en; fr;q=0.9, de;q=0.8
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "birthday": "2200-12-31",
+  "email": "john.doe@example.com",
+  "status": "PART-TIME"
+}
+
+```
+3a) Response
+```
+HTTP 201
+Content-Type: application/prs.hal-forms+json; charset=utf-8;
+
+{
+  "_links": {
+    "self": {
+      "href": "http://example.com/api/v1/employees/1"
+    }
+  }
+}
+```
+3b) Response Bad Request
+```
+HTTP 400
+Content-Type: application/problem+json; charset=utf-8;
+
+{
+  "type": "https://example.com/validation-error",
+  "title": "Your request parameters didn't validate.",
+  "invalidProperties": [
+    {
+      "$id": "#/birthday",
+      "reason": "must be in the past"
+    },
+    {
+      "$id": "#/email",
+      "reason": "exists already"
+    }
+  ],
+  "_templates": {
+    "addEmployee": {
+      "title": "Add Employee",
+      "method": "POST",
+      "contentType": "application/json",
+      "jsonSchema": {
+        "$id": "http://example.com/api/employees",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "birthday"
+        ],
+        "properties": {
+          "firstName": {
+          },
+          "lastName": {
+          },
+          "birthday": {
+          },
+          "email": {
+            "enum": [
+              "john.doe-01@example.com",
+              "john.doe-a@example.com"
+            ]
+          },
+          "status": {}
+        }
+      }
+    }
+  }
+}
+```
+
 ### 4. Get more employees (next page)
 
 A HAL form is usually required for the first request. The HAL form can be omitted in subsequent request.
