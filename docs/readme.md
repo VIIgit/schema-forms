@@ -654,8 +654,8 @@ Provider-->Consumer: 200: JSON Data
 
 # Localization
 
-https://docs.spring.io/spring-hateoas/docs/current/reference/html
-
+https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n
+https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n
 
 https://viigit.github.io/schema-forms/api/v1/employees.json
 https://viigit.github.io/schema-forms/api/v1/employees.en.json
