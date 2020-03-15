@@ -1,0 +1,30 @@
+$defs:
+  resign:
+    reason:
+      title: Kündigungsgrund
+
+employees:
+  id:
+    title: Nummer
+  firstName:
+    title: Vorname
+  lastName:
+    title: Nachname
+  birthday:
+    title: Geburtsdatum
+  email:
+    title: Email
+  workload:
+    title: Arbeitspensum
+    oneOf:
+      PART-TIME:
+        title: Teilzeit
+      PERMANENT
+        title: Vollzeit
+  active:
+    title: Active
+    oneOf:
+      "true":
+        title: Aktive
+      "false":
+        title: Gekündigt

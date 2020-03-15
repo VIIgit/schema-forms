@@ -652,94 +652,16 @@ Provider-->Consumer: 200: JSON Data
 
 ### Example UI
 
-#### Employees
-___
-<div class="btn btn-green">add employee</div>
-<span class="tooltip"> 1 
-<span class="tooltiptext tooltip-top">
-Response of GET /api/v1/employees<br>
-Accept: application/schema+json
-</span>
-</span>
-___
+# Localization
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th style="text-align: left">Firstname
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: left">Lastname<
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: left">Date of birth
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: left">workload
-        <span class="tooltip"> 1
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-      <th style="text-align: center">Actions
-        <span class="tooltip"> 1 
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td style="text-align: left">John</td>
-      <td style="text-align: left">Doe</td>
-      <td style="text-align: left">1967-12-22</td>
-      <td style="text-align: left">Festangestellt</td>
-      <td style="text-align: center">
-      <div class="btn btn-red">remove</div><span class="tooltip"> 2
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span>
-      <div class="btn btn-blue">edit</div><span class="tooltip"> 2
-        <span class="tooltiptext tooltip-top">
-        Response of GET /api/v1/employees</br>
-        Accept: application/schema+json
-        </span>
-        </span></td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td style="text-align: left">Mary</td>
-      <td style="text-align: left">Major</td>
-      <td style="text-align: left">2000-02-28</td>
-      <td style="text-align: left">Gekündigt</td>
-      <td style="text-align: center"><div class="btn btn-blue">edit</div></td>
-    </tr>
-  </tbody>
-</table>
+https://docs.spring.io/spring-hateoas/docs/current/reference/html
+
+
+https://viigit.github.io/schema-forms/api/v1/employees.json
+https://viigit.github.io/schema-forms/api/v1/employees.en.json
+https://viigit.github.io/schema-forms/api/v1/employees.de.json
+https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties
+
 
 # References
 - HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
@@ -750,7 +672,9 @@ ___
   - [https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
   - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 -  Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
--  Spring Affordance HATEOAS [https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas](https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas)
+-  Spring.io
+   -  Affordance HATEOAS [https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas](https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas)
+   -  Internationalization [https://docs.spring.io/spring-hateoas/docs/current/reference/html](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
 
 - This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
 

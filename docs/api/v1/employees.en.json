@@ -1,0 +1,30 @@
+$defs:
+  resign:
+    reason:
+      title: Reason for termination
+
+employees:
+  id:
+    title: "#" 
+  firstName:
+    title: First Name
+  lastName:
+    title: Last Name
+  birthday:
+    title: Birthday Name
+  email:
+    title: Email
+  workload:
+    title: Workload
+    oneOf:
+      PART-TIME:
+        title: Part time
+      PERMANENT
+        title: Permanent
+  active:
+    title: Active
+    oneOf:
+      "true":
+        title: Active
+      "false":
+        title: Resigned

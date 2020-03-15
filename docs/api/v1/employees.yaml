@@ -560,7 +560,7 @@ components:
         properties:
           id:
             type: integer
-            example: 1        
+            example: 1
           firstName:
             type: string
             example: John
@@ -612,7 +612,6 @@ components:
             type: string
             format: date
             example: 2020-02-29
-
 
   parameters:
     AcceptLanguage:

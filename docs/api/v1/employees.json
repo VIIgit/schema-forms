@@ -1,0 +1,48 @@
+$id: "http://example.com/api/v1/employees"
+$schema: "https://json-schema.org/draft/2019-09/schema"
+$defs:
+  employeeSalary:
+    $anchor: salary
+    $id: /api/v1/salaries
+  resign:
+    $anchor: resignReason
+    type: object
+    properties:
+      reason:
+        type: string
+        title: Reason for termination 
+        minLength: 10
+        maxLength: 100
+type: object
+properties:
+  id:
+    type: integer
+    example: 1        
+  firstName:
+    type: string
+    example: John
+    minLength: 1
+  lastName:
+    type: string
+    example: Doe
+    minLength: 1
+  birthday:
+    type: string
+    format: date
+  email:
+    type: string
+    format: email
+  workload:
+    type: string
+    oneOf:
+    - const: PART-TIME
+      title: Teilzeit
+    - const: PERMANENT
+      title: Festangestellt
+  active:
+    type: boolean
+    oneOf:
+    - const: true
+      title: Active
+    - const: false
+      title: Resigned
