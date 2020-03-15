@@ -10,7 +10,7 @@ tags:
   - name: Resource Workflows
     description: "example workflows 5-8"
   - name: Alternative Option
-    description: "Alternatives for _application/schema+json_ or _application/schema-instance+json_"
+    description: "Alternative for _GET /employees Accept application/schema+json_ "
 servers:
   - url: 'http://example.com/api/v1'
 paths:
@@ -44,6 +44,60 @@ paths:
               schema:
                 $ref: '#/components/schemas/EmployeesJsonSchema'
 
+  /employees.json:
+    parameters:
+      - $ref: '#/components/parameters/AcceptLanguage'
+    get:
+      summary: Schema of Employees
+      operationId: get-employees-schema
+      tags:
+      - Alternative Option
+      responses:
+        '200':
+          description: |
+            OK
+            
+            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: s8437b6154v76348
+              description: To cache resources
+          content:
+            application/schema+json:
+              schema:
+                $ref: '#/components/schemas/EmployeesJsonSchema'
+            application/schema-instance+json; schema="http://example.com/api/v1/employees":
+              schema:
+                $ref: '#/components/schemas/EmployeesJsonSchema'
+  /salaries.json:
+    parameters:
+      - $ref: '#/components/parameters/AcceptLanguage'
+    get:
+      summary: Schema of Employees's salaries
+      operationId: get-salaries-schema
+      tags:
+      - Alternative Option
+      responses:
+        '200':
+          description: |
+            OK
+            
+            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: s8437b6154v76348
+              description: To cache resources
+          content:
+            application/schema+json:
+              schema:
+                $ref: '#/components/schemas/SalariesJsonSchema'
+            application/schema-instance+json; schema="http://example.com/api/v1/salaries":
+              schema:
+                $ref: '#/components/schemas/SalariesJsonSchema'
     post:
       summary: 'Register employee'
       tags:
@@ -100,7 +154,7 @@ paths:
                               enum:
                                 - john.doe-01@example.com
                                 - john.doe-a@example.com
-                            status: {}
+                            workload: {}
 
                 just problem+json:
                   value:
@@ -174,91 +228,6 @@ paths:
         '204':
           description: Removed
 
-  '/employees/{id}/resign':
-    parameters:
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-      - $ref: '#/components/parameters/AcceptLanguage'
-    post:
-      summary: Update Employee
-      tags:
-        - Resource Workflows
-      operationId: resign-employees-id
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ResignReason"
-      responses:
-        '204':
-          description: No content
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-
-
-  /employees.json:
-    parameters:
-      - $ref: '#/components/parameters/AcceptLanguage'
-    get:
-      summary: Schema of Employees
-      operationId: get-employees-schema
-      tags:
-      - Alternative Option
-      responses:
-        '200':
-          description: |
-            OK
-            
-            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
-          headers:
-            ETag:
-              schema:
-                type: string
-                example: s8437b6154v76348
-              description: To cache resources
-          content:
-            application/schema+json:
-              schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
-            application/schema-instance+json; schema="http://example.com/api/v1/employees":
-              schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
-
-  /salaries.json:
-    parameters:
-      - $ref: '#/components/parameters/AcceptLanguage'
-    get:
-      summary: Schema of Employees's salaries
-      operationId: get-salaries-schema
-      tags:
-      - Alternative Option
-      responses:
-        '200':
-          description: |
-            OK
-            
-            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
-          headers:
-            ETag:
-              schema:
-                type: string
-                example: s8437b6154v76348
-              description: To cache resources
-          content:
-            application/schema+json:
-              schema:
-                $ref: '#/components/schemas/SalariesJsonSchema'
-            application/schema-instance+json; schema="http://example.com/api/v1/salaries":
-              schema:
-                $ref: '#/components/schemas/SalariesJsonSchema'
 components:
 
   schemas:
@@ -281,15 +250,7 @@ components:
       properties:
         id:
           type: integer
-          example: 1
-
-    ResignReason:
-      type: object
-      properties:
-        reason:
-          type: string
-          example: "Opportunity to work abroad on API Design"
-          
+          example: 1        
     Employee:
       type: object
       properties:
@@ -309,12 +270,18 @@ components:
           type: string
           format: email
           example: john.doe@example.com
-        status:
+        workload:
           type: string
           enum:
           - PART-TIME
           - PERMANENT
-          - RESIGNED
+        active:
+          type: boolean
+          oneOf:
+          - const: true
+            title: Active
+          - const: false
+            title: Resigned
     ExistingEmployee:
       allOf:
       - $ref: "#/components/schemas/EmployeeId"
@@ -365,15 +332,13 @@ components:
                         type: string
                         format: email
                         example: john.doe@example.com
-                      status:
-                        type: string
+                      workload:
+                        type: boolean
                         oneOf:
                         - const: PART-TIME
                           title: Teilzeit
                         - const: PERMANENT
                           title: Festangestellt
-                        - const: RESIGNED
-                          title: Gekündigt
             deleteEmployee:
               type: object
               properties:
@@ -427,16 +392,20 @@ components:
                           type: string
                           format: email
                           example: john.doe@example.com
-                        status:
+                        workload:
                           type: string
                           oneOf:
                           - const: PART-TIME
                             title: Teilzeit
                           - const: PERMANENT
                             title: Festangestellt
-                          - const: RESIGNED
-                            title: Gekündigt
-
+                        active:
+                          type: string
+                          oneOf:
+                          - const: true
+                            title: Active
+                          - const: false
+                            title: Resigned
 
     EmployeeLinks:
       type: object
@@ -555,7 +524,7 @@ components:
                         enum: 
                         - john.doe-01@example.com
                         - john.doe-a@example.com
-                      status: {}
+                      workload: {}
 
     EmployeesSchema:
       allOf:
@@ -606,16 +575,20 @@ components:
           email:
             type: string
             format: email
-          status:
+          workload:
             type: string
             oneOf:
             - const: PART-TIME
               title: Teilzeit
             - const: PERMANENT
               title: Festangestellt
-            - const: RESIGNED
-              title: Gekündigt
-
+          active:
+            type: boolean
+            oneOf:
+            - const: true
+              title: Active
+            - const: false
+              title: Resigned
     SalariesJsonSchema:
       type: object
       example:
@@ -625,7 +598,7 @@ components:
         properties:
           id:
             type: integer
-            example: 123413       
+            example: 1        
           baseSalary:
             type: object
             properties:
@@ -638,7 +611,8 @@ components:
           payday:
             type: string
             format: date
-            example: "2020-02-29"
+            example: 2020-02-29
+
 
   parameters:
     AcceptLanguage:
