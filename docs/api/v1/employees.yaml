@@ -44,60 +44,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/EmployeesJsonSchema'
 
-  /employees.json:
-    parameters:
-      - $ref: '#/components/parameters/AcceptLanguage'
-    get:
-      summary: Schema of Employees
-      operationId: get-employees-schema
-      tags:
-      - Alternative Option
-      responses:
-        '200':
-          description: |
-            OK
-            
-            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
-          headers:
-            ETag:
-              schema:
-                type: string
-                example: s8437b6154v76348
-              description: To cache resources
-          content:
-            application/schema+json:
-              schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
-            application/schema-instance+json; schema="http://example.com/api/v1/employees":
-              schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
-  /salaries.json:
-    parameters:
-      - $ref: '#/components/parameters/AcceptLanguage'
-    get:
-      summary: Schema of Employees's salaries
-      operationId: get-salaries-schema
-      tags:
-      - Alternative Option
-      responses:
-        '200':
-          description: |
-            OK
-            
-            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
-          headers:
-            ETag:
-              schema:
-                type: string
-                example: s8437b6154v76348
-              description: To cache resources
-          content:
-            application/schema+json:
-              schema:
-                $ref: '#/components/schemas/SalariesJsonSchema'
-            application/schema-instance+json; schema="http://example.com/api/v1/salaries":
-              schema:
-                $ref: '#/components/schemas/SalariesJsonSchema'
     post:
       summary: 'Register employee'
       tags:
@@ -228,6 +174,65 @@ paths:
         '204':
           description: Removed
 
+
+  /employees.json:
+    parameters:
+      - $ref: '#/components/parameters/AcceptLanguage'
+    get:
+      summary: Schema of Employees
+      operationId: get-employees-schema
+      tags:
+      - Alternative Option
+      responses:
+        '200':
+          description: |
+            OK
+            
+            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: s8437b6154v76348
+              description: To cache resources
+          content:
+            application/schema+json:
+              schema:
+                $ref: '#/components/schemas/EmployeesJsonSchema'
+            application/schema-instance+json; schema="http://example.com/api/v1/employees":
+              schema:
+                $ref: '#/components/schemas/EmployeesJsonSchema'
+  /salaries.json:
+    parameters:
+      - $ref: '#/components/parameters/AcceptLanguage'
+    get:
+      summary: Schema of Employees's salaries
+      operationId: get-salaries-schema
+      tags:
+      - Alternative Option
+      responses:
+        '200':
+          description: |
+            OK
+            
+            References [_**application/schema+json**_ and _**application/schema-instance+json**_](https://json-schema.org/draft/2019-09/json-schema-core.html#parameter)
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: s8437b6154v76348
+              description: To cache resources
+          content:
+            application/schema+json:
+              schema:
+                $ref: '#/components/schemas/SalariesJsonSchema'
+            application/schema-instance+json; schema="http://example.com/api/v1/salaries":
+              schema:
+                $ref: '#/components/schemas/SalariesJsonSchema'
+            xxx:
+              schema: 
+                $ref: "https://viigit.github.io/schema-forms/api/v1/employees.json"
+
 components:
 
   schemas:
@@ -277,11 +282,9 @@ components:
           - PERMANENT
         active:
           type: boolean
-          oneOf:
-          - const: true
-            title: Active
-          - const: false
-            title: Resigned
+          enum:
+          - true
+          - false
     ExistingEmployee:
       allOf:
       - $ref: "#/components/schemas/EmployeeId"
