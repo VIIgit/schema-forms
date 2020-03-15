@@ -133,7 +133,8 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
         "lastName": "string",
         "birthday": "2000-12-31",
         "email": "john.doe@example.com",
-        "status": "PART-TIME",
+        "workload": "PART-TIME",
+        "active": true,
         "_links": {
           "self": {
             "href": "http://example.com/employees/1"
@@ -168,7 +169,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
           },
           "lastName": {
           },
-          "status": {
+          "workload": {
           }
         }
       }
@@ -195,7 +196,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
           },
           "email": {
           },
-          "status": {
+          "workload": {
             "oneOf": [
               {
                 "const": "PART-TIME"
@@ -267,7 +268,7 @@ Vary: Accept-Language
                 "type": "string",
                 "format": "email"
             },
-            "status": {
+            "workload": {
                 "type": "string",
                 "oneOf": [
                     {
@@ -276,8 +277,17 @@ Vary: Accept-Language
                     },{
                         "const": "PERMANENT",
                         "title": "Permanent"
+                    }
+                ]
+            },
+            "active": {
+                "type": "boolean",
+                "oneOf": [
+                    {
+                        "const": true,
+                        "title": "Active"
                     },{
-                        "const": "RESIGNED",
+                        "const": false,
                         "title": "Resigned"
                     }
                 ]
@@ -315,11 +325,12 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
   "lastName": "Doe",
   "birthday": "2200-12-31",
   "email": "john.doe@example.com",
-  "status": "PART-TIME"
+  "workload": "PART-TIME"
 }
-
 ```
-3a) Response
+Responses
+
+- 3a) Created
 ```
 HTTP 201
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
@@ -332,7 +343,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
   }
 }
 ```
-3b) Response Bad Request
+- 3b) Bad Request
 ```
 HTTP 400
 Content-Type: application/problem+json; charset=utf-8;
@@ -377,7 +388,16 @@ Content-Type: application/problem+json; charset=utf-8;
               "john.doe-a@example.com"
             ]
           },
-          "status": {}
+          "workload": {
+            "oneOf": [
+              {
+                "const": "PART-TIME"
+              },
+              {
+                "const": "PERMANENT"
+              }
+            ]
+          }
         }
       }
     }
@@ -409,7 +429,7 @@ Content-Type: application/hal+json; charset=utf-8;
         "lastName": "Moe",
         "birthday": "1999-02-28",
         "email": "mary.moe@example.com",
-        "status": "PERMANENT",
+        "workload": "PERMANENT",
         "_links": {
           "self": {
             "href": "http://example.com/api/v1/employees/21"
@@ -433,11 +453,34 @@ Content-Type: application/hal+json; charset=utf-8;
 }
 ```
 
-Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 
 ## Specific API Resource
 
-### 1. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
+<div class="diagram">
+Note over Consumer: 5. Read Employee\nwith HAL Forms
+Consumer->Provider: GET /api/v1/employees/1\n[application/prs.hal-forms+json]
+Note right of Provider: An Employee\nwith HAL Links\nwith HAL Forms
+Provider-->Consumer: 200: Ok (JSON Data)
+
+Note over Consumer: 6. GET `jsonSchema`
+Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
+Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\nwith `Cache-Control` Header
+Provider-->Consumer: 304: Not Modified
+
+Note over Consumer: 7. Update Employee\nwith HAL Forms
+Consumer->Provider: POST /api/v1/employees/1\n[application/prs.hal-forms+json]
+Note right of Provider: a)Employee updated
+Provider-->Consumer: 204: No Content (JSON Data)
+Note right of Provider: b) or\nwith validation failures\n\nwith updated HAL Forms
+Provider-->Consumer: 400: Bad request (JSON Data)
+
+Note over Consumer: 8. Read next Employees\nwithout HAL Form
+Consumer->Provider: DELETE /api/v1/employees/1\n[application/hal+json]
+Note right of Provider: Employee Removed
+Provider-->Consumer: 204: No Content
+</div>
+
+### 5. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
    
 Request
 ```
@@ -456,7 +499,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
     "lastName": "doe",
     "birthday": "2000-12-31",
     "email": "john.doe@example.com",
-    "status": "PART-TIME",
+    "workload": "PART-TIME",
     "_links": {
         "self": {
         "href": "http://example.com/employees/1"
@@ -491,7 +534,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
                 },
                 "lastName": {
                 },
-                "status": {
+                "workload": {
                     "oneOf": [
                     {
                         "const": "PART-TIME"
@@ -507,7 +550,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 }
 ```
 
-### 2. Get employee's JSON Validation Schema
+### 6. Get employee's JSON Validation Schema
 Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`
 
 ```
@@ -534,7 +577,7 @@ Etag: x123dfff
 Vary: Accept-Language
 ```
 
-### 3. Get more employees (next page) 
+### 7. Get more employees (next page) 
    
 Request
 ```
@@ -556,7 +599,8 @@ Content-Type: application/hal+json; charset=utf-8;
         "lastName": "Moe",
         "birthday": "1999-02-28",
         "email": "mary.moe@example.com",
-        "status": "PERMANENT",
+        "workload": "PERMANENT",
+        "active": true,
         "_links": {
           "self": {
             "href": "http://example.com/api/v1/employees/21"
@@ -647,7 +691,7 @@ ___
         </span>
         </span>
       </th>
-      <th style="text-align: left">Status
+      <th style="text-align: left">workload
         <span class="tooltip"> 1
         <span class="tooltiptext tooltip-top">
         Response of GET /api/v1/employees</br>
