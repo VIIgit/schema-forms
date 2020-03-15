@@ -331,6 +331,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 Responses
 
 - 3a) Created
+  
 ```
 HTTP 201
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
@@ -343,7 +344,9 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
   }
 }
 ```
+
 - 3b) Bad Request
+
 ```
 HTTP 400
 Content-Type: application/problem+json; charset=utf-8;
