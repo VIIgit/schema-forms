@@ -161,7 +161,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
       "method": "GET",
       "contentType": "application/x-www-form-urlencoded",
       "jsonSchema": {
-        "$id": "http://example.com/api/v1/employees#employee",
+        "$id": "http://example.com/api/v1/employees",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "properties": {
@@ -179,7 +179,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
       "method": "POST",
       "contentType": "application/json",
       "jsonSchema": {
-        "$id": "http://example.com/api/v1/employees#employee",
+        "$id": "http://example.com/api/v1/employees",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "required": [
@@ -218,7 +218,7 @@ Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cachea
 
 ```
 "jsonSchema": {
-    "$id": "http://example.com/api/v1/employees#employee"
+    "$id": "http://example.com/api/v1/employees"
     ...
 }
 ```
@@ -239,74 +239,94 @@ Etag: x123dfff
 Vary: Accept-Language
 
 {
-  "$id": "http://example.com/api/v1/employees",
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$defs": {
-    "employee": {
-        "$anchor": "employee",
-        "type": "object",
-        "properties": {
-            "id": {
-                "type": "integer",
-                "title": "#"
-            },
-            "firstName": {
-                "type": "string",
-                "example": "John",
-                "minLength": 1
-            },
-            "lastName": {
-                "type": "string",
-                "example": "Doe",
-                "minLength": 1
-            },
-            "birthday": {
-                "type": "string",
-                "format": "date"
-            },
-            "email": {
-                "type": "string",
-                "format": "email"
-            },
-            "workload": {
-                "type": "string",
-                "oneOf": [
-                    {
-                        "const": "PART-TIME",
-                        "title": "Part-time"
-                    },{
-                        "const": "PERMANENT",
-                        "title": "Permanent"
-                    }
-                ]
-            },
-            "active": {
-                "type": "boolean",
-                "oneOf": [
-                    {
-                        "const": true,
-                        "title": "Active"
-                    },{
-                        "const": false,
-                        "title": "Resigned"
-                    }
-                ]
+    "$id": "http://example.com/api/v1/employees",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$defs": {
+        "employeeSalary": {
+            "$anchor": "salary",
+            "$id": "http://example.com/api/v1/salaries"
+        },
+        "resign": {
+            "$anchor": "resignReason",
+            "type": "object",
+            "properties": {
+                "reason": {
+                    "type": "string",
+                    "title": "Reason for termination",
+                    "minLength": 10,
+                    "maxLength": 100
+                }
             }
-        }
-    },
-    "employeeLinks": {
-        "$anchor": "employeeLinks",
-        "type": "object",
-        "properties": {
-            "_links": {
-                "type": "object",
-                "properties": {
-                    "self": {
-                        "type": "object",
-                        "title": "Refresh"
+        },
+        "employeeLinks": {
+            "$anchor": "employeeLinks",
+            "type": "object",
+            "properties": {
+                "_links": {
+                    "type": "object",
+                    "properties": {
+                        "self": {
+                            "type": "object",
+                            "title": "Refresh"
+                        }
                     }
                 }
             }
+        }
+    },
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "title": "#"
+        },
+        "firstName": {
+            "type": "string",
+            "title": "First Name",
+            "example": "John",
+            "minLength": 1
+        },
+        "lastName": {
+            "type": "string",
+            "title": "Last Name",
+            "example": "Doe",
+            "minLength": 1
+        },
+        "birthday": {
+            "type": "string",
+            "title": "Date of Birth",
+            "format": "date"
+        },
+        "email": {
+            "type": "string",
+            "title": "Email",
+            "format": "email"
+        },
+        "workload": {
+            "type": "string",
+            "title": "Workload",
+            "oneOf": [
+                {
+                    "const": "PART-TIME",
+                    "title": "Part-time"
+                },{
+                    "const": "PERMANENT",
+                    "title": "Permanent"
+                }
+            ]
+        },
+        "active": {
+            "type": "boolean",
+            "title": "Status",
+            "oneOf": [
+                {
+                    "const": true,
+                    "title": "Active"
+                },{
+                    "const": false,
+                    "title": "Resigned"
+                }
+            ]
         }
     }
 }
@@ -525,7 +545,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
         "method": "PATCH",
         "contentType": "application/json",
         "jsonSchema": {
-            "$id": "http://example.com/api/v1/employees#employee",
+            "$id": "http://example.com/api/v1/employees",
             "$schema": "https://json-schema.org/draft/2019-09/schema",
             "type": "object",
             "required": [
@@ -558,7 +578,7 @@ Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cachea
 
 ```
 "jsonSchema": {
-    "$id": "http://example.com/api/v1/employees#employee"
+    "$id": "http://example.com/api/v1/employees"
     ...
 }
 ```
