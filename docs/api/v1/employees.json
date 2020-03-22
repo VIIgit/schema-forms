@@ -5,7 +5,7 @@ $defs:
     $anchor: salary
     $id: /api/v1/salaries
   resign:
-    $anchor: resignReason
+    $anchor: ResignReason
     type: object
     properties:
       reason:
@@ -21,6 +21,7 @@ properties:
   firstName:
     type: string
     example: John
+    description: First name with initials of the second first name
     minLength: 1
   lastName:
     type: string

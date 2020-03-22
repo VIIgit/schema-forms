@@ -580,7 +580,7 @@ components:
             $anchor: salary
             $id: /api/v1/salaries
           resign:
-            $anchor: resignReason
+            $anchor: ResignReason
             type: object
             properties:
               reason:

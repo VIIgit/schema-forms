@@ -214,14 +214,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 ```
 
 ### 2. Get employee's JSON Validation Schema
-Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
-
-```
-"jsonSchema": {
-    "$id": "http://example.com/api/v1/employees"
-    ...
-}
-```
+Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
 Request
 ```
@@ -247,8 +240,9 @@ Vary: Accept-Language
             "$id": "http://example.com/api/v1/salaries"
         },
         "resign": {
-            "$anchor": "resignReason",
+            "$anchor": "ResignReason",
             "type": "object",
+            "title": "Resign",
             "properties": {
                 "reason": {
                     "type": "string",
@@ -259,7 +253,7 @@ Vary: Accept-Language
             }
         },
         "employeeLinks": {
-            "$anchor": "employeeLinks",
+            "$anchor": "EmployeeLinks",
             "type": "object",
             "properties": {
                 "_links": {
@@ -274,6 +268,7 @@ Vary: Accept-Language
             }
         }
     },
+    "$anchor": "employee",
     "type": "object",
     "properties": {
         "id": {
@@ -283,7 +278,8 @@ Vary: Accept-Language
         "firstName": {
             "type": "string",
             "title": "First Name",
-            "example": "John",
+            "description": "First name with initials of the second first name",
+            "example": "John F.",
             "minLength": 1
         },
         "lastName": {
@@ -300,6 +296,7 @@ Vary: Accept-Language
         "email": {
             "type": "string",
             "title": "Email",
+            "default" : "@example.com"
             "format": "email"
         },
         "workload": {
@@ -329,6 +326,145 @@ Vary: Accept-Language
             ]
         }
     }
+}
+```
+
+Request Internationalization of schema attributes :white_medium_square:
+```
+GET /api/v1/employees HTTP/1.1
+Accept: application/schema-i18n+json; charset=utf-8;
+Accept-Language: en; fr;q=0.9, de;q=0.8
+```
+
+Response Option A 
+
+```
+HTTP 200
+Content-Type: application/schema-i18n+json; charset=utf-8;
+Content-Language: en
+Cache-Control: max-age=3600
+Etag: x123dfff
+Vary: Accept-Language
+
+{
+    "$id": "http://example.com/api/v1/employees",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$defs": {
+        "resign": {
+            "title": "Resign",
+            "properties": {
+                "reason": {
+                    "title": "Reason for termination"
+                }
+            }
+        },
+        "employeeLinks": {
+            "properties": {
+                "_links": {
+                    "properties": {
+                            "title": "Refresh"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "$anchor": "employee",
+    "type": "object",
+    "properties": {
+        "id": {
+            "title": "#"
+        },
+        "firstName": {
+            "title": "First Name",
+            "description": "First name with initials of the second first name",
+            "example": "Employee's first name"
+        },
+        "lastName": {
+            "title": "Last Name",
+            "example": "Doe"
+        },
+        "birthday": {
+            "title": "Date of Birth"
+        },
+        "email": {
+            "title": "Email",
+            "default" : "@example.com"
+        },
+        "workload": {
+            "title": "Workload",
+            "oneOf": [
+                {
+                    "const": "PART-TIME",
+                    "title": "Part-time"
+                },{
+                    "const": "PERMANENT",
+                    "title": "Permanent"
+                }
+            ]
+        },
+        "active": {
+            "title": "Status",
+            "oneOf": [
+                {
+                    "const": true,
+                    "title": "Active"
+                },{
+                    "const": false,
+                    "title": "Resigned"
+                }
+            ]
+        }
+    }
+}
+```
+
+Response Option B
+
+[spring-hateoas#mediatypes.hal-forms.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n)
+
+```
+HTTP 200
+Content-Type: application/schema-i18n+json; charset=utf-8;
+Content-Language: en
+Cache-Control: max-age=3600
+Etag: x123dfff
+Vary: Accept-Language
+
+{
+    "$id": "http://example.com/api/v1/employees",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+
+    "Employee.titel": "Employee",
+
+    "Employee.id.titel": "#",
+
+    "Employee.firstName.titel": "First Name",
+    "Employee.firstName.description": "First name with initials of the second first name",
+    "Employee.firstName.example": "Employee's first name",
+
+    "Employee.lastName.titel": "Last Name",
+    "Employee.lastName.example": "Employee's first name",
+
+    "Employee.birthday.titel": "Date of Birth",
+
+    "Employee.email.titel": "Email",
+    "Employee.email.description": "Business email address",
+    "Employee.email.default": "@example.com",
+
+    "Employee.workload.titel": "Workload",
+    "Employee.workload.oneOf.PART-TIME.title": "Part-time",
+    "Employee.workload.oneOf.PERMANENT.title": "Permanent",
+
+    "Employee.active.titel": "Status",
+    "Employee.active.oneOf.true.title": "Active",
+    "Employee.active.oneOf.false.title": "Resigned",
+
+
+    "ResignReason.title": "Resign",
+    "ResignReason.reason.title": "Reason for termination",
+
+    "EmployeeLinks._links.self.title": "Refresh"
 }
 ```
 
@@ -540,7 +676,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
         }
     },
     "_templates": {
-        "addEmployee": {
+        "updateEmployee": {
         "title": "Edit Employee",
         "method": "PATCH",
         "contentType": "application/json",
