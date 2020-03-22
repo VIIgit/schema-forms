@@ -1,30 +1,35 @@
-$defs:
-  ResignReason:
-    reason:
-      title: Kündigungsgrund
+{
+  "$id": "http://example.com/api/v1/employees",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
 
-employees:
-  id:
-    title: Nummer
-  firstName:
-    title: Vorname
-  lastName:
-    title: Nachname
-  birthday:
-    title: Geburtsdatum
-  email:
-    title: Email
-  workload:
-    title: Arbeitspensum
-    oneOf:
-      PART-TIME:
-        title: Teilzeit
-      PERMANENT
-        title: Vollzeit
-  active:
-    title: Active
-    oneOf:
-      "true":
-        title: Aktive
-      "false":
-        title: Gekündigt
+  "Employee.titel": "Mitarbeiter",
+
+  "Employee.id.titel": "Nr.",
+
+  "Employee.firstName.titel": "Vorname",
+  "Employee.firstName.description": "Vorname und zweiter Vorname des Mitarbeiter ",
+  "Employee.firstName.example": "Hans F.",
+
+  "Employee.lastName.titel": "Nachname",
+  "Employee.lastName.example": "Muster",
+
+  "Employee.birthday.titel": "Geburtsdatum",
+
+  "Employee.email.titel": "Email",
+  "Employee.email.description": "Geschäfts Email Adresse",
+  "Employee.email.default": "@example.com",
+
+  "Employee.workload.titel": "Arbeitspensum",
+  "Employee.workload.oneOf.PART-TIME.title": "Teilzeit",
+  "Employee.workload.oneOf.PERMANENT.title": "Vollzeit",
+
+  "Employee.active.titel": "Status",
+  "Employee.active.oneOf.true.title": "Aktive",
+  "Employee.active.oneOf.false.title": "Gekündigt",
+
+
+  "ResignReason.title": "Kündigen",
+  "ResignReason.reason.title": "Kündigungsgrund",
+
+  "EmployeeLinks._links.self.title": "Aktualisieren"
+}

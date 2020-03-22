@@ -216,6 +216,8 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 ### 2. Get employee's JSON Validation Schema
 Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
+There is no standard yet but a [controversial feature request @ json-schema-org](https://github.com/json-schema-org/json-schema-vocabularies)
+
 Request
 ```
 GET /api/v1/employees HTTP/1.1
