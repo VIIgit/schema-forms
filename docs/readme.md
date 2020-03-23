@@ -216,7 +216,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 ### 2. Get employee's JSON Validation Schema
 Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
-There is no standard yet but a [controversial feature request @ json-schema-org](https://github.com/json-schema-org/json-schema-vocabularies)
+There is no standard yet but a [controversial feature request @ json-schema-org](https://github.com/json-schema-org/json-schema-vocabularies) [annotation: Multilingual meta data](https://github.com/json-schema-org/json-schema-spec/issues/53)
 
 Request
 ```
@@ -331,7 +331,7 @@ Vary: Accept-Language
 }
 ```
 
-Request Internationalization of schema attributes :white_medium_square:
+Request Internationalization of schema attributes
 ```
 GET /api/v1/employees HTTP/1.1
 Accept: application/schema-i18n+json; charset=utf-8;
@@ -435,7 +435,6 @@ Vary: Accept-Language
 
 {
     "$id": "http://example.com/api/v1/employees",
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
 
     "Employee.titel": "Employee",
 
@@ -785,7 +784,7 @@ Content-Type: application/hal+json; charset=utf-8;
 }
 ```
 
-Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
+
 
 ### Collection Sequence Diagram
 <div class="diagram">
@@ -819,12 +818,13 @@ https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.ha
 https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n
 
 https://viigit.github.io/schema-forms/api/v1/employees.json
-https://viigit.github.io/schema-forms/api/v1/employees.en.json
-https://viigit.github.io/schema-forms/api/v1/employees.de.json
+https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json
+https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json
 https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties
 
 
 # References
+- Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 - HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
 - The home of JSON Schema [https://json-schema.org](https://json-schema.org)
   - Canonical URI of a schema (`$id`) [JSON Schema 2019-09](https://json-schema.org/draft/2019-09/json-schema-core.html)
