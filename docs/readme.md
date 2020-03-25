@@ -4,16 +4,16 @@
 <script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
 
-A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide support dynamic runtime input forms with JSON Schema 
+A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide JSON Validation Schema for forms. 
 
 # Motivation
 [HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as attributes needed for each operation.
 
-Sometimes more complex UI Validation is required than HAL-Forms exposes via `properties[name, prompt, readOnly, regex, required, templated, value]` to be able to submit a valid form. Giving the consumer of an API more options to validate a request before they submit it, increases the user expirience and saves server round-trips.
+HAL-Forms comes with a reduced set of validation rules `properties[name, prompt, readOnly, regex, required, templated, value]` compared to JSON Validation Schema.
 
 The motivation is to combine and extend HAL-Forms with  JSON-Schema and to provide a localized, cacheable JSON Validation Schema to make the API even more user-friendly always (I _LOVE**OAS**_).
 
-JSON schema is a popular standard for the API model specification and has many libraries that make use of it e.g.:
+JSON schema is a popular standard for API model specifications and has many libraries that make use of it e.g.:
 - JSON Schema Code Generators ( for Java, Python, ...)
 - JSON Schema Forms ( https://github.com/rjsf-team/react-jsonschema-form ) 
 - JSON Schema Validators (Ajv,...)
@@ -53,11 +53,9 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
         }
     }
     ```
-### Validation Options
+### Comparison between HAL Forms and JSON Validation Schema
 
-Comparison between HAL Forms `_templates..properties` and JSON Validation Schema
-
-_template.properties | JSON Schema alternative
+HAL Form <br>`_templates..properties` | JSON Schema <br>alternative
 :--- | :---
 `name` | attribute's name
 `prompt` | MAY `example` 
@@ -293,12 +291,12 @@ Vary: Accept-Language
         "birthday": {
             "type": "string",
             "title": "Date of Birth",
+            "default" : "1990-01-01",
             "format": "date"
         },
         "email": {
             "type": "string",
             "title": "Email",
-            "default" : "@example.com"
             "format": "email"
         },
         "workload": {
