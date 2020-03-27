@@ -28,15 +28,16 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 - `jsonSchema`
   
-    - This is a valid JSON Validation Schema.
-    - This is an OPTIONAL element.
-    - The JSON Validation Schema MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
-    - MAY contain the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) or the operation (GET, POST, PATCH, ...).
-    - SHOULD be the localized (`title`, `description`, ...)
-    - if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
-    
-    Example:
-    ```
+  - This is a valid JSON Validation Schema.
+  - This is an OPTIONAL element.
+  - The JSON Validation Schema MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
+  - MAY contain the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) or the operation (GET, POST, PATCH, ...).
+  - SHOULD be the localized (`title`, `description`, ...)
+  - if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
+  
+  Example:
+
+  ``` javascript
     "_templates" : {
         "default" : {
             "title" : "Filter",
@@ -52,13 +53,14 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
             }
         }
     }
-    ```
+  ```
+
 ### Comparison between HAL Forms and JSON Validation Schema
 
 HAL Form <br>`_templates..properties` | JSON Schema <br>alternative
 :--- | :---
 `name` | attribute's name
-`prompt` | MAY `example` 
+`prompt` | MAY `example`
 `templated` | n/a
 `value` | `default`
 **Validation Keywords for Strings:** |
@@ -75,7 +77,7 @@ n/a | `writeOnly`, ...
 *n/a | `title`, `description` UI agnostic, but COULD be used as Label, Tooltip, ...
 **Keywords for Applying Subschemas:** |
 n/a | `oneOf`, `anyOf` at Object level
-n/a | `oneOf` type(e.g. string) level options (localized complex `enum`)
+`regex` | `oneOf` type(e.g. string) level options (localized complex `enum`)
 n/a | `if`, `then`, `else`, `dependentSchemas` conditional subschema
 n/a | [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
 
@@ -110,15 +112,18 @@ Provider-->Consumer: 200: JSON Data
 </div>
 
 ### 1. Get Data with HAL-Forms (JSON Schema enhanced)
-   
+
 Request
-```
+
+``` javascript
 GET /api/v1/employees HTTP/1.1
 Accept: application/prs.hal-forms+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
+
 Response
-```
+
+``` javascript
 HTTP 200
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
@@ -212,18 +217,22 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 ```
 
 ### 2. Get employee's JSON Validation Schema
+
 Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
 There is no standard yet but a [controversial feature request @ json-schema-org](https://github.com/json-schema-org/json-schema-vocabularies) [annotation: Multilingual meta data](https://github.com/json-schema-org/json-schema-spec/issues/53)
 
 Request
-```
+
+``` javascript
 GET /api/v1/employees HTTP/1.1
 Accept: application/schema+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
+
 Response
-```
+
+``` javascript
 HTTP 200
 Content-Type: application/schema+json; charset=utf-8;
 Content-Language: en
@@ -330,7 +339,8 @@ Vary: Accept-Language
 ```
 
 Request Internationalization of schema attributes
-```
+
+``` javascript
 GET /api/v1/employees HTTP/1.1
 Accept: application/schema-i18n+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
@@ -338,7 +348,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 
 Response Option A 
 
-```
+``` javascript
 HTTP 200
 Content-Type: application/schema-i18n+json; charset=utf-8;
 Content-Language: en
@@ -468,9 +478,10 @@ Vary: Accept-Language
 ```
 
 ### 3. Submit new Employee Record
-   
+
 Request
-```
+
+``` javascript
 POST /api/v1/employees HTTP/1.1
 Accept: application/prs.hal-forms+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
@@ -483,11 +494,12 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
   "workload": "PART-TIME"
 }
 ```
+
 Responses
 
 - 3a) Created
   
-```
+``` javascript
 HTTP 201
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
@@ -502,7 +514,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
 - 3b) Bad Request
 
-```
+``` javascript
 HTTP 400
 Content-Type: application/problem+json; charset=utf-8;
 
@@ -568,13 +580,16 @@ Content-Type: application/problem+json; charset=utf-8;
 A HAL form is usually required for the first request. The HAL form can be omitted in subsequent request.
 
 Request
-```
+
+``` javascript
 GET /api/v1/employees HTTP/1.1
 Accept: application/hal+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
+
 Response
-```
+
+``` javascript
 HTTP 200
 Content-Type: application/hal+json; charset=utf-8;
 
@@ -611,7 +626,6 @@ Content-Type: application/hal+json; charset=utf-8;
 }
 ```
 
-
 ## Specific API Resource
 
 <div class="diagram">
@@ -639,84 +653,81 @@ Provider-->Consumer: 204: No Content
 </div>
 
 ### 5. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
-   
+
 Request
-```
+
+``` javascript
 GET /api/v1/employees/1 HTTP/1.1
 Accept: application/prs.hal-forms+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
+
 Response
-```
+
+``` javascript
 HTTP 200
 Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
 {
-    "id": 1,
-    "firstName": "John",
-    "lastName": "doe",
-    "birthday": "2000-12-31",
-    "email": "john.doe@example.com",
-    "workload": "PART-TIME",
-    "_links": {
-        "self": {
-        "href": "http://example.com/employees/1"
-        },
-        "leavesCompany": {
-        "href": "http://example.com/api/v1/employees/1"
+  "id": 1,
+  "firstName": "John",
+  "lastName": "doe",
+  "birthday": "2000-12-31",
+  "email": "john.doe@example.com",
+  "workload": "PART-TIME",
+  "_links": {
+      "self": {
+      "href": "http://example.com/employees/1"
+      },
+      "leavesCompany": {
+      "href": "http://example.com/api/v1/employees/1"
+      }
+  },
+  "_links": {
+      "self": {
+          "href": "http://example.com/api/v1/employees?page=1"
+      },
+      "next": {
+          "href": "http://example.com/api/v1/employees?page=2"
+      }
+  },
+  "_templates": {
+      "updateEmployee": {
+      "title": "Edit Employee",
+      "method": "PATCH",
+      "contentType": "application/json",
+      "jsonSchema": {
+        "$id": "http://example.com/api/v1/employees",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "required": [
+        "firstName",
+        "lastName",
+        ],
+        "properties": {
+          "firstName": {
+          },
+          "lastName": {
+          },
+          "workload": {
+              "oneOf": [
+              {
+                  "const": "PART-TIME"
+              },{
+                  "const": "PERMANENT"
+              }
+            ]
+          }
         }
-    },
-    "_links": {
-        "self": {
-            "href": "http://example.com/api/v1/employees?page=1"
-        },
-        "next": {
-            "href": "http://example.com/api/v1/employees?page=2"
-        }
-    },
-    "_templates": {
-        "updateEmployee": {
-        "title": "Edit Employee",
-        "method": "PATCH",
-        "contentType": "application/json",
-        "jsonSchema": {
-            "$id": "http://example.com/api/v1/employees",
-            "$schema": "https://json-schema.org/draft/2019-09/schema",
-            "type": "object",
-            "required": [
-            "firstName",
-            "lastName",
-            ],
-            "properties": {
-                "firstName": {
-                },
-                "lastName": {
-                },
-                "workload": {
-                    "oneOf": [
-                    {
-                        "const": "PART-TIME"
-                    },{
-                        "const": "PERMANENT"
-                    }
-                    ]
-                }
-            }
-        }
-        }
+      }
     }
+  }
 }
 ```
 
 ### 6. Get employee's JSON Validation Schema
-Follow the `jsonSchema`'s identifier `$id` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`
 
-```
-"jsonSchema": {
-    "$id": "http://example.com/api/v1/employees"
-    ...
-}
-```
+Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
 Request
 ```
@@ -725,8 +736,10 @@ Accept: application/schema+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 If-None-Match: x123dfff
 ```
+
 Response
-```
+
+``` javascript
 HTTP 304
 Content-Type: application/schema+json; charset=utf-8;
 Content-Language: en
@@ -735,16 +748,19 @@ Etag: x123dfff
 Vary: Accept-Language
 ```
 
-### 7. Get more employees (next page) 
-   
+### 7. Get more employees (next page)
+
 Request
-```
+
+``` javascript
 GET /api/v1/employees/1 HTTP/1.1
 Accept: application/hal+json; charset=utf-8;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
+
 Response
-```
+
+``` javascript
 HTTP 200
 Content-Type: application/hal+json; charset=utf-8;
 
@@ -782,9 +798,8 @@ Content-Type: application/hal+json; charset=utf-8;
 }
 ```
 
-
-
 ### Collection Sequence Diagram
+
 <div class="diagram">
 Note over Consumer: 1. Read Employees (With HAL Form)
 Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
@@ -807,7 +822,6 @@ Note right of Provider: Collection of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
 </div>
 
-
 ### Example UI
 
 # Localization
@@ -820,8 +834,8 @@ https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json
 https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json
 https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties
 
-
 # References
+
 - Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 - HAL-Form [http://rwcbook.github.io/hal-forms](http://rwcbook.github.io/hal-forms/)
 - The home of JSON Schema [https://json-schema.org](https://json-schema.org)
@@ -830,13 +844,12 @@ https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties
 - ETag, Cache-Control 
   - [https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)
   - [https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
--  Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
--  Spring.io
-   -  Affordance HATEOAS [https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas](https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas)
-   -  Internationalization [https://docs.spring.io/spring-hateoas/docs/current/reference/html](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
+- Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
+- Spring.io
+  -  Affordance HATEOAS [https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas](https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas)
+  -  Internationalization [https://docs.spring.io/spring-hateoas/docs/current/reference/html](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
 
 - This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
-
 
 <script> 
     var options = {theme: 'simple'};
