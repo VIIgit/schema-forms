@@ -117,7 +117,7 @@ Request
 
 ``` javascript
 GET /api/v1/employees HTTP/1.1
-Accept: application/prs.hal-forms+json; charset=utf-8;
+Accept: application/prs.hal-forms+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
@@ -125,7 +125,7 @@ Response
 
 ``` javascript
 HTTP 200
-Content-Type: application/prs.hal-forms+json; charset=utf-8;
+Content-Type: application/prs.hal-forms+json;
 
 {
   "_embedded": {
@@ -226,7 +226,7 @@ Request
 
 ``` javascript
 GET /api/v1/employees HTTP/1.1
-Accept: application/schema+json; charset=utf-8;
+Accept: application/schema+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
@@ -234,7 +234,7 @@ Response
 
 ``` javascript
 HTTP 200
-Content-Type: application/schema+json; charset=utf-8;
+Content-Type: application/schema+json;
 Content-Language: en
 Cache-Control: max-age=3600
 Etag: x123dfff
@@ -342,7 +342,7 @@ Request Internationalization of schema attributes
 
 ``` javascript
 GET /api/v1/employees HTTP/1.1
-Accept: application/schema-i18n+json; charset=utf-8;
+Accept: application/schema-i18n+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
@@ -350,7 +350,7 @@ Response Option A
 
 ``` javascript
 HTTP 200
-Content-Type: application/schema-i18n+json; charset=utf-8;
+Content-Type: application/schema-i18n+json;
 Content-Language: en
 Cache-Control: max-age=3600
 Etag: x123dfff
@@ -435,7 +435,7 @@ Response Option B
 
 ```
 HTTP 200
-Content-Type: application/schema-i18n+json; charset=utf-8;
+Content-Type: application/schema-i18n+json;
 Content-Language: en
 Cache-Control: max-age=3600
 Etag: x123dfff
@@ -483,7 +483,7 @@ Request
 
 ``` javascript
 POST /api/v1/employees HTTP/1.1
-Accept: application/prs.hal-forms+json; charset=utf-8;
+Accept: application/prs.hal-forms+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 
 {
@@ -501,7 +501,7 @@ Responses
   
 ``` javascript
 HTTP 201
-Content-Type: application/prs.hal-forms+json; charset=utf-8;
+Content-Type: application/prs.hal-forms+json;
 
 {
   "_links": {
@@ -516,7 +516,7 @@ Content-Type: application/prs.hal-forms+json; charset=utf-8;
 
 ``` javascript
 HTTP 400
-Content-Type: application/problem+json; charset=utf-8;
+Content-Type: application/problem+json;
 
 {
   "type": "https://example.com/validation-error",
@@ -583,7 +583,7 @@ Request
 
 ``` javascript
 GET /api/v1/employees HTTP/1.1
-Accept: application/hal+json; charset=utf-8;
+Accept: application/hal+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
@@ -591,7 +591,7 @@ Response
 
 ``` javascript
 HTTP 200
-Content-Type: application/hal+json; charset=utf-8;
+Content-Type: application/hal+json;
 
 {
   "_embedded": {
@@ -658,7 +658,7 @@ Request
 
 ``` javascript
 GET /api/v1/employees/1 HTTP/1.1
-Accept: application/prs.hal-forms+json; charset=utf-8;
+Accept: application/prs.hal-forms+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
@@ -666,7 +666,7 @@ Response
 
 ``` javascript
 HTTP 200
-Content-Type: application/prs.hal-forms+json; charset=utf-8;
+Content-Type: application/prs.hal-forms+json;
 
 {
   "id": 1,
@@ -732,7 +732,7 @@ Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employee
 Request
 ```
 GET /api/v1/employees HTTP/1.1
-Accept: application/schema+json; charset=utf-8;
+Accept: application/schema+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 If-None-Match: x123dfff
 ```
@@ -741,7 +741,7 @@ Response
 
 ``` javascript
 HTTP 304
-Content-Type: application/schema+json; charset=utf-8;
+Content-Type: application/schema+json;
 Content-Language: en
 Cache-Control: max-age=3100;
 Etag: x123dfff
@@ -754,7 +754,7 @@ Request
 
 ``` javascript
 GET /api/v1/employees/1 HTTP/1.1
-Accept: application/hal+json; charset=utf-8;
+Accept: application/hal+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
@@ -762,7 +762,7 @@ Response
 
 ``` javascript
 HTTP 200
-Content-Type: application/hal+json; charset=utf-8;
+Content-Type: application/hal+json;
 
 {
   "_embedded": {
