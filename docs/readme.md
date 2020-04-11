@@ -7,9 +7,9 @@
 <nav>
   <ul>
     <li><a href="#motivation">Motivation</a></li>
-    <li><a href="#extention-of-hal-forms">Extention of HAL-Forms</a></li>
-    <li><a href="workflow-examples">Workflow Examples</a></li>
-    <li><a href="references">References</a></li>
+    <li><a href="#extention-of-hal-forms">Extention</a></li>
+    <li><a href="#workflow-examples">Examples</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
