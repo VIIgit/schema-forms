@@ -3,7 +3,7 @@
 <script src="/schema-forms/assets/js/snap.svg/snap.svg-min.js" ></script>
 <script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
-<script src="/schema-forms/assets/js/stick-header.js" ></script>
+<script src="/schema-forms/assets/js/sticky-header.js" ></script>
 <nav>
   <ul>
     <li><a href="#motivation">Motivation</a></li>
