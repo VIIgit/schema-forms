@@ -1,5 +1,5 @@
 $(window).scroll(function(){
-	if($(window).scrollTop() >= 310) {
+	if($(window).scrollTop() >= 260) {
 		$('nav').addClass('sticky');
 	} else {
 		$('nav').removeClass('sticky');
