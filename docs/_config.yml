@@ -1,9 +1,12 @@
 title: ""
 description: "A HAL-Form extension with JSON Validation Schema you will love"
 show_downloads: false
-theme: pmarsceill/just-the-docs
+
+# other
+theme: jekyll-theme-slate
 
 # pmarsceill/just-the-docs
+x-theme: pmarsceill/just-the-docs
 
 baseurl: "/" # the subpath of your site, e.g. /blog
 #url: "https://pmarsceill.github.io" # the base hostname & protocol for your site, e.g. http://example.com
@@ -50,5 +53,3 @@ compress_html:
   profile: false
 
 
-# other
-x-theme: jekyll-theme-slate

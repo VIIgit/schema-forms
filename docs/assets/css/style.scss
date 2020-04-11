@@ -115,3 +115,14 @@ pre.highlight {
     top: -5px;
     left: 125%;
 }
+
+
+
+
+@media screen {
+    .inner {
+        max-width: 800px;
+        padding: 10px 5px;
+        margin: 0 auto;
+    }
+}
