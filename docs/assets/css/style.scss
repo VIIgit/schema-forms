@@ -1,38 +1,36 @@
----
----
+--- --- @import "jekyll-theme-slate";
 
-@import "jekyll-theme-slate";
-
-#header_wrap > header::before {    background-image: url('/schema-forms/assets/images/schema-forms-2.png');
+#header_wrap>header::before {
+    background-image: url('/schema-forms/assets/images/schema-forms-2.png');
     background-size: 500px 100px;
     display: inline-block;
-    width: 500px; 
-    height: 100px; 
-    content:"";
+    width: 500px;
+    height: 100px;
+    content: "";
 }
 
-#project_title{
+#project_title {
     display: none;
 }
 
 .btn {
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	color: #FFFFFF;
-	font-family: Arial;
-	font-size: 15px;
-	font-weight: 100;
-	padding: 8px;
-	text-decoration: none;
-	display: inline-block;
-	cursor: pointer;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: 100;
+    padding: 8px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
     text-align: center;
-	border-width: 0px;
+    border-width: 0px;
 }
 
 .btn-blue {
-	background-color: #3D94F6;
+    background-color: #3D94F6;
 }
 
 .btn-blue:hover {
@@ -52,7 +50,7 @@
 }
 
 .btn-green:hover {
-    background:  rgb(4, 97, 0);
+    background: rgb(4, 97, 0);
 }
 
 pre.highlight {
@@ -121,8 +119,64 @@ pre.highlight {
 
 @media screen {
     .inner {
-        max-width: 800px;
+        max-width: 900px;
         padding: 10px 5px;
         margin: 0 auto;
     }
 }
+
+
+//// sticky header
+
+header {
+    box-sizing: border-box;
+    position: relative;
+    padding-top: 20px;
+}
+
+h1#top {
+    padding-top: 2em;
+}
+
+nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #515151;
+    opacity: 0.93;
+}
+
+nav ul {
+    list-style: none;
+    text-align: center;
+    padding: 1em 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-left: 35px;
+    line-height: 1.5;
+}
+
+nav ul li::first-child {
+    margin-left: 0;
+}
+
+nav ul a {
+    color: white;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.sticky {
+    position: fixed;
+    top: 0px;
+    height: 90px;
+    max-width: 100%;
+    background-color: #515151;
+    opacity: 0.93;
+}
+
+/////  

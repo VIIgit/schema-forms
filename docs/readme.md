@@ -3,6 +3,15 @@
 <script src="/schema-forms/assets/js/snap.svg/snap.svg-min.js" ></script>
 <script src="/schema-forms/assets/js/underscore/underscore-min.js" ></script>
 <script src="/schema-forms/assets/js/js-sequence-diagrams/sequence-diagram-min.js" ></script>
+<script src="/schema-forms/assets/js/stick-header.js" ></script>
+<nav>
+  <ul>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#extention-of-hal-forms">Extention of HAL-Forms</a></li>
+    <li><a href="workflow-examples">Workflow Examples</a></li>
+    <li><a href="references">References</a></li>
+  </ul>
+</nav>
 
 A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide JSON Validation Schema for forms. 
 
