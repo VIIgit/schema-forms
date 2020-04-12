@@ -33,36 +33,34 @@ JSON schema is a popular standard for API model specifications and has many libr
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119].
 ## Definition
 
-[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `template` element contains an additional `jsonSchema` attribute.
-
-- `jsonSchema`
+[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `template` element contains an additional `jsonSchema` attribute:
   
-  - This is a valid JSON Validation Schema.
-  - This is an OPTIONAL element.
-  - The JSON Validation Schema MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
-  - MAY contain the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) or the operation (GET, POST, PATCH, ...).
-  - SHOULD be the localized (`title`, `description`, ...)
-  - if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
-  
-  Example:
+- `jsonSchema` contains a valid JSON Validation Schema.
+- `jsonSchema` is an OPTIONAL element.
+- `jsonSchema` MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
+- `jsonSchema` MAY contain the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) or the operation (GET, POST, PATCH, ...).
+- `jsonSchema` SHOULD be the localized (`title`, `description`, ...)
+- if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
 
-  ``` javascript
-    "_templates" : {
-        "default" : {
-            "title" : "Filter",
-            "method":"GET",
-            "contentType": "application/x-www-form-urlencoded",
-            "jsonSchema": {
-                "$id": "http://example.com/api/v1/employees",
-                "$schema": "https://json-schema.org/draft/2019-09/schema",
-                "type": "object",
-                "properties": {
-                    ...
-                }
-            }
-        }
-    }
-  ```
+Example:
+
+``` javascript
+  "_templates" : {
+      "default" : {
+          "title" : "Filter",
+          "method":"GET",
+          "contentType": "application/x-www-form-urlencoded",
+          "jsonSchema": {
+              "$id": "http://example.com/api/v1/employees",
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "type": "object",
+              "properties": {
+                  ...
+              }
+          }
+      }
+  }
+```
 
 ### Comparison between HAL Forms and JSON Validation Schema
 
@@ -838,10 +836,10 @@ Provider-->Consumer: 200: JSON Data
 https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n
 https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n
 
-https://viigit.github.io/schema-forms/api/v1/employees.json
-https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json
-https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json
-https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties
+[/api/v1/employees.json](https://viigit.github.io/schema-forms/api/v1/employees.json)
+[/api/v1/employees.i18n.en.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json)
+[/api/v1/employees.i18n.de.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json)
+[/api/v1/employees_en_US.properties](https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties.txt)
 
 # References
 

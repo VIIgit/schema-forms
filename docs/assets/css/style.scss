@@ -142,35 +142,38 @@ h1#top {
     padding-top: 2em;
 }
 
+
 nav {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 0px;
+    right: 0px;
     width: 100%;
     top: 0px;
-    background-color: #515151;
-    opacity: 0.93;
+    opacity:0.93;
+    top: -35px;
+    max-width: 100%;
+	border-top: 1px solid white;
+	padding: 3px 0px;
 }
 
 nav ul {
     list-style: none;
     text-align: center;
-    padding: 0.2em 0;
+    padding: 0
 }
 
 nav ul li {
     display: inline-block;
     margin-left: 35px;
-    line-height: 1.5;
+    line-height:1.5
 }
 
 nav ul li::first-child {
-    margin-left: 0;
+    margin-left:0
 }
 
 nav ul a {
     color: white;
-    text-transform: uppercase;
     text-decoration: none;
 }
 
@@ -178,8 +181,59 @@ nav ul a {
     position: fixed;
     top: 0px;
     max-width: 100%;
-    background-color: #515151;
-    opacity: 0.93;
+	height: 25px;
+    background-color: rgba(51,51,51,0.93);
+    border: 0;
+    
+            animation: fadeIn ease 0.5s;
+    -webkit-animation: fadeIn ease 2s;
+       -moz-animation: fadeIn ease 0.5s;
+         -o-animation: fadeIn ease 0.5s;
+        -ms-animation: fadeIn ease 0.5s;
 }
-
+  
+  @keyframes fadeIn{
+    0% {
+        background-color: rgba(0,0,0,0);
+    }
+    100% {
+        background-color: rgba(51,51,51,0.93);
+    }
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% {
+        background-color: rgba(0,0,0,0);
+    }
+    100% {
+        background-color: rgba(51,51,51,0.93);
+    }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% {
+        background-color: rgba(0,0,0,0);
+    }
+    100% {
+        background-color: rgba(51,51,51,0.93);
+    }
+  }
+  
+  @-o-keyframes fadeIn {
+    0% {
+        background-color: rgba(0,0,0,0);
+    }
+    100% {
+        background-color: rgba(51,51,51,0.93);
+    }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% {
+        background-color: rgba(0,0,0,0);
+    }
+    100% {
+        background-color: rgba(51,51,51,0.93);
+    }
+  }
 /////  
