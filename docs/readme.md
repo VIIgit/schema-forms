@@ -7,7 +7,8 @@
 <nav>
   <ul>
     <li><a href="#motivation">Motivation</a></li>
-    <li><a href="#extention-of-hal-forms">Extention</a></li>
+    <li><a href="#extention-of-hal-forms">Form Extention</a></li>
+    <li><a href="#hal-form-i18n-extention">i18n Extention</a></li>
     <li><a href="#workflow-examples">Examples</a></li>
     <li><a href="#references">References</a></li>
   </ul>
@@ -16,51 +17,21 @@
 A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide JSON Validation Schema for forms. 
 
 # Motivation
+
 [HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as attributes needed for each operation.
 
 HAL-Forms comes with a reduced set of validation rules `properties[name, prompt, readOnly, regex, required, templated, value]` compared to JSON Validation Schema.
 
 The motivation is to combine and extend HAL-Forms with  JSON-Schema and to provide a localized, cacheable JSON Validation Schema to make the API even more user-friendly always (I _LOVE**OAS**_).
 
+## JSON schema
+
 JSON schema is a popular standard for API model specifications and has many libraries that make use of it e.g.:
+
 - JSON Schema Code Generators ( for Java, Python, ...)
-- JSON Schema Forms ( https://github.com/rjsf-team/react-jsonschema-form ) 
+- JSON Schema Forms ( https://github.com/rjsf-team/react-jsonschema-form )
 - JSON Schema Validators (Ajv,...)
 - JSON Schema Example Generators (FakerJs, ...)
-
-# Extention of HAL Forms
-## Compliance
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119].
-## Definition
-
-[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `template` element contains an additional `jsonSchema` attribute:
-  
-- `jsonSchema` contains a valid JSON Validation Schema.
-- `jsonSchema` is an OPTIONAL element.
-- `jsonSchema` MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
-- `jsonSchema` MAY contain the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) or the operation (GET, POST, PATCH, ...).
-- `jsonSchema` SHOULD be the localized (`title`, `description`, ...)
-- if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
-
-Example:
-
-``` javascript
-  "_templates" : {
-      "default" : {
-          "title" : "Filter",
-          "method":"GET",
-          "contentType": "application/x-www-form-urlencoded",
-          "jsonSchema": {
-              "$id": "http://example.com/api/v1/employees",
-              "$schema": "https://json-schema.org/draft/2019-09/schema",
-              "type": "object",
-              "properties": {
-                  ...
-              }
-          }
-      }
-  }
-```
 
 ### Comparison between HAL Forms and JSON Validation Schema
 
@@ -87,6 +58,56 @@ n/a | `oneOf`, `anyOf` at Object level
 `regex` | `oneOf` type(e.g. string) level options (localized complex `enum`)
 n/a | `if`, `then`, `else`, `dependentSchemas` conditional subschema
 n/a | [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
+
+# HAL Form - JSONSchema Extention
+
+### Compliance
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119](http://tools.ietf.org/html/rfc2119).
+
+## Definition
+
+[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `_template` element contains an additional `jsonSchema` attribute:
+  
+- `jsonSchema` MUST contains a valid JSON Validation Schema.
+- `jsonSchema` is an OPTIONAL element.
+- `jsonSchema` MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
+- `jsonSchema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) and the operation (GET, POST, PATCH, ...).
+- `jsonSchema` SHOULD be the localized (`title`, `description`, ...)
+- if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
+
+Example: GET Form with required query parameter
+
+``` javascript
+{
+  "firstName": "John",
+  ...
+
+  "_templates" : {
+    "default" : {
+      "title" : "Filter",
+      "method":"GET",
+      "contentType": "application/x-www-form-urlencoded",
+      "jsonSchema": {
+        "$id": "http://example.com/api/v1/employees",
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "type": "object",
+        "required": ["firstName"],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+# HAL Form - i18n Extention
+### Compliance
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119](http://tools.ietf.org/html/rfc2119)..
+## Definition
 
 # Workflow Examples
 
