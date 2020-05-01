@@ -15,8 +15,11 @@ h3 {
    font-size: 18px;
 }
 
-body, pre, code {
+body {
     font-size: 14px;
+}
+pre, code {
+    font-size: 12px;
 }
 
 #header_wrap>header::before {
@@ -154,7 +157,9 @@ pre.highlight {
     fill: #aaaaaa
 }
 .note rect, .note path {
-    fill: #ffff00;
+    fill: rgba(255, 255, 0, 0.9);
+    stroke-width: 1px;
+    stroke-linecap: round;
 }
 .title rect, .title path,
 .actor rect, .actor path {
