@@ -76,7 +76,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - `jsonSchema` SHOULD be the localized (`title`, `description`, ...)
 - if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
 
-Example: GET Form with required query parameter
+_Example:_ GET Form with required query parameter
 
 ``` javascript
 {
