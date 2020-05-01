@@ -3,6 +3,22 @@
 
 @import "jekyll-theme-slate";
 
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+   font-size: 18px;
+}
+
+body {
+    font-size: 12px;
+}
+
 #header_wrap>header::before {
     background-image: url('/schema-forms/assets/images/schema-forms-2.png');
     background-size: 500px 100px;
@@ -22,7 +38,7 @@
     border-radius: 6px;
     color: #FFFFFF;
     font-family: Arial;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 100;
     padding: 8px;
     text-decoration: none;

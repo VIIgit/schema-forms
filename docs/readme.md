@@ -7,8 +7,8 @@
 <nav>
   <ul>
     <li><a href="#motivation">Motivation</a></li>
-    <li><a href="#extention-of-hal-forms">Form Extention</a></li>
-    <li><a href="#hal-form-i18n-extention">i18n Extention</a></li>
+    <li><a href="#hal-form---jsonschema-extention">Form Extention</a></li>
+    <li><a href="#hal-form---i18n-extention">i18n Extention</a></li>
     <li><a href="#workflow-examples">Examples</a></li>
     <li><a href="#references">References</a></li>
   </ul>
@@ -105,8 +105,11 @@ Example: GET Form with required query parameter
 ```
 
 # HAL Form - i18n Extention
+
 ### Compliance
+
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119](http://tools.ietf.org/html/rfc2119)..
+
 ## Definition
 
 # Workflow Examples
@@ -374,7 +377,7 @@ Accept: application/schema-i18n+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
 
-Response Option A 
+Response Option A
 
 ``` javascript
 HTTP 200
