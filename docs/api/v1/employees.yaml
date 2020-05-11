@@ -5,12 +5,23 @@ info:
   description: |
     Examples described at [https://viigit.github.io/schema-forms](https://viigit.github.io/schema-forms/)
 tags:
+  - name: HAL Form of a collection
+    description: |
+      `application/prs.hal-forms+json`
+      
+      Forms templates to filter the list (GET) and to add new records (POST)
+  - name: HAL Form of a specific record
+    description: |
+      `application/prs.hal-forms+json`
+      
+      Forms templates to update a record (PATCH/PUT)
   - name: Collection Workflows
     description: "example workflows 1-4"
   - name: Resource Workflows
     description: "example workflows 5-8"
   - name: Alternative Option
     description: "Alternative for _GET /employees Accept application/schema+json_ "
+  - name: All
 servers:
   - url: 'http://example.com/api/v1'
 paths:
@@ -21,7 +32,9 @@ paths:
       summary: List of Employees
       operationId: get-employees
       tags:
+      - HAL Form of a collection
       - Collection Workflows
+      - All
       parameters: 
       - $ref: '#/components/parameters/AcceptLanguage'
       responses:
@@ -42,12 +55,16 @@ paths:
                 $ref: '#/components/schemas/EmployeesTemplates'
             application/schema+json:
               schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
+                type: object
+              examples:
+                schema:
+                  $ref: '#/components/examples/EmployeesJsonSchema'
 
     post:
       summary: 'Register employee'
       tags:
-        - Collection Workflows
+      - HAL Form of a collection
+      - Collection Workflows
       operationId: post-employees
       responses:
         '201':
@@ -134,10 +151,12 @@ paths:
     get:
       summary: Details of an Employee
       tags:
-        - Resource Workflows
+      - HAL Form of a specific record
+      - Resource Workflows
       operationId: get-employees-id
       responses:
         '200':
+          description: ok
           content:
             application/hal+json:
               schema:      
@@ -150,7 +169,8 @@ paths:
     patch:
       summary: Update Employee
       tags:
-        - Resource Workflows
+      - HAL Form of a specific record
+      - Resource Workflows
       operationId: patch-employees-id
       requestBody:
         content:
@@ -211,6 +231,35 @@ paths:
                 type: object
                 properties: {}
 
+  /employment-contracts:
+    parameters:
+      - $ref: '#/components/parameters/AcceptLanguage'
+    get:
+      summary: List of Employees
+      operationId: get-employment-contracts
+      tags:
+      - HAL Form of a collection
+      - Collection Workflows
+      - All
+      parameters: 
+      - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+                example: s8437b6154v76348
+              description: To cache resources
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/EmploymentContract'
+
+# EmploymentContract
+
+
   /employees.json:
     parameters:
       - $ref: '#/components/parameters/AcceptLanguage'
@@ -234,10 +283,16 @@ paths:
           content:
             application/schema+json:
               schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
+                type: object
+              examples:
+                schema:
+                  $ref: '#/components/examples/EmployeesJsonSchema'
             application/schema-instance+json; schema="http://example.com/api/v1/employees":
               schema:
-                $ref: '#/components/schemas/EmployeesJsonSchema'
+                type: object
+              examples:
+                schema:
+                  $ref: '#/components/examples/EmployeesJsonSchema'
 
   /salaries.json:
     parameters:
@@ -312,16 +367,9 @@ components:
           type: string
           format: email
           example: john.doe@example.com
-        workload:
-          type: string
-          enum:
-          - PART-TIME
-          - PERMANENT
-        active:
-          type: boolean
-          enum:
-          - true
-          - false
+        _embedded:
+          $ref: "#/components/schemas/EmploymentContracts"
+
     ExistingEmployee:
       allOf:
       - $ref: "#/components/schemas/EmployeeId"
@@ -432,20 +480,25 @@ components:
                           type: string
                           format: email
                           example: john.doe@example.com
-                        workload:
-                          type: string
-                          oneOf:
-                          - const: PART-TIME
-                            title: Teilzeit
-                          - const: PERMANENT
-                            title: Festangestellt
-                        active:
-                          type: string
-                          oneOf:
-                          - const: true
-                            title: Active
-                          - const: false
-                            title: Resigned
+                        _embedded:
+                          type: object
+                          properties:
+                            contracts:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  formOfEmployment:
+                                    type: string
+                                    oneOf:
+                                    - const: PART-TIME
+                                      title: Part-time
+                                    - const: PERMANENT
+                                      title: Permanent
+                                  hiredOn:
+                                    type: string
+                                    format: date
+                                    example: 2000-12-31
 
     EmployeeLinks:
       type: object
@@ -577,10 +630,127 @@ components:
               type: string
               example: "https://json-schema.org/draft/2019-09/schema"
         - $ref: "#/components/schemas/Employee"
-  
-    EmployeesJsonSchema:
+
+    SalariesJsonSchema:
       type: object
       example:
+        $id: "http://example.com/api/v1/salaries"
+        $schema: "https://json-schema.org/draft/2019-09/schema"
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1        
+          baseSalary:
+            type: object
+            properties:
+              ammount:
+                type: integer
+                example: 1000
+              currency:
+                type: string
+                example: EUR
+          payday:
+            type: string
+            format: date
+            example: 2020-02-29
+
+    Resign:
+      type: object
+      properties:
+        reason:
+          type: string
+          title: Reason for termination 
+          example: Opportunity to work abroad
+          minLength: 10
+          maxLength: 100
+
+
+    # EmploymentContract Models
+
+    EmbeddedEmploymentContracts:
+      type: object
+      properties:
+        _embedded:
+          $ref: "#/components/schemas/EmploymentContracts"
+
+    EmploymentContracts:
+      type: object
+      properties:
+        employment-contracts:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmploymentContract"
+        _links:
+          type: object
+          readOnly: true
+          allOf:
+          - $ref: "#/components/schemas/EmploymentContractLink"
+
+    EmploymentContract:
+      type: object
+      required:
+      - formOfEmployment
+      - hiredOn
+      properties:
+        formOfEmployment:
+          type: string
+          enum:
+          - PART-TIME
+          - PERMANENT
+        hiredOn:
+          type: string
+          format: date
+          example: "2020-05-01"
+        endOfContract:
+          type: string
+          format: date
+          example: "2050-05-01"
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - RESIGNED
+
+         
+
+    EmploymentContractLinks:
+      type: object
+      properties:
+        _links:
+          type: object
+          readOnly: true
+          allOf:
+          - $ref: "#/components/schemas/EmploymentContractLink"
+          
+    EmploymentContractLink:
+      type: object
+      required: 
+      - self
+      properties:
+        self:
+          type: object
+          required: 
+          - href
+          properties:
+            href:
+              type: string
+              example: 'http://example.com/employment-contracts'
+
+  parameters:
+    AcceptLanguage:
+      name: Accept-Language
+      in: query
+      schema:
+        type: string
+        example: en; fr;q=0.9, de;q=0.8
+      description: To localize content
+
+  examples:
+      
+    EmployeesJsonSchema:
+      summary: A sample object
+      value:
         $id: "http://example.com/api/v1/employees"
         $schema: "https://json-schema.org/draft/2019-09/schema"
         $defs:
@@ -622,6 +792,7 @@ components:
               title: Teilzeit
             - const: PERMANENT
               title: Festangestellt
+
           active:
             type: boolean
             oneOf:
@@ -629,46 +800,3 @@ components:
               title: Active
             - const: false
               title: Resigned
-
-    SalariesJsonSchema:
-      type: object
-      example:
-        $id: "http://example.com/api/v1/salaries"
-        $schema: "https://json-schema.org/draft/2019-09/schema"
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 1        
-          baseSalary:
-            type: object
-            properties:
-              ammount:
-                type: integer
-                example: 1000
-              currency:
-                type: string
-                example: EUR
-          payday:
-            type: string
-            format: date
-            example: 2020-02-29
-
-    Resign:
-      type: object
-      properties:
-        reason:
-          type: string
-          title: Reason for termination 
-          example: Opportunity to work abroad
-          minLength: 10
-          maxLength: 100
-
-  parameters:
-    AcceptLanguage:
-      name: Accept-Language
-      in: query
-      schema:
-        type: string
-        example: en; fr;q=0.9, de;q=0.8
-      description: To localize content

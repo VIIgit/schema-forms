@@ -14,15 +14,15 @@
   </ul>
 </nav>
 
-A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide JSON Validation Schema for forms. 
+A backward-compatible extension for [HAL-Forms](http://rwcbook.github.io/hal-forms/) to provide a JSON Validation Schema for forms.
 
 # Motivation
 
-[HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. `_templates` make it possible to show all the operations possible as well as attributes needed for each operation.
+[HAL-Forms](http://rwcbook.github.io/hal-forms/), an extension of HAL, introduces another element, `_templates`. With `_templates` it is possible to show all possible operations as well as the attributes required for each operation.
 
-HAL-Forms comes with a reduced set of validation rules `properties[name, prompt, readOnly, regex, required, templated, value]` compared to JSON Validation Schema.
+HAL-Forms has a reduced set of validation rules `properties[name, prompt, readOnly, regex, required, templated, value]` compared to JSON Validation Schema.
 
-The motivation is to combine and extend HAL-Forms with  JSON-Schema and to provide a localized, cacheable JSON Validation Schema to make the API even more user-friendly always (I _LOVE**OAS**_).
+The motivation is to combine and extend HAL-Forms with  JSON-Schema and to provide a localized, cacheable JSON Validation Schema to make the API even more user-friendly (I _LOVE**OAS**_).
 
 ## JSON schema
 
@@ -67,14 +67,15 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Definition
 
-[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `_template` element contains an additional `jsonSchema` attribute:
+[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `_template` element contains an additional `jsonSchema` property:
   
-- `jsonSchema` MUST contains a valid JSON Validation Schema.
-- `jsonSchema` is an OPTIONAL element.
-- `jsonSchema` MAY has a canonical URI of a schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
-- `jsonSchema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) and the operation (GET, POST, PATCH, ...).
-- `jsonSchema` SHOULD be the localized (`title`, `description`, ...)
-- if `jsonSchema` is present then `properties` becomes redundant (or obsolete !?)
+- `jsonSchema` MUST contains a valid JSON Validation Schema
+- `jsonSchema` MUST match with the schema of the `method` to construct a successful subsequent request
+- `jsonSchema` is an OPTIONAL property
+- `jsonSchema` MAY has a canonical URI of the whole schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
+- `jsonSchema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) and the operation (GET, POST, PATCH, ...)
+- `jsonSchema` MAY provides `title` and `description` which SHOULD be localized
+- only one of `jsonSchema` or `properties` property is present. Providing both would be redundant
 
 _Example:_ GET Form with required query parameter
 
@@ -95,7 +96,8 @@ _Example:_ GET Form with required query parameter
         "required": ["firstName"],
         "properties": {
           "firstName": {
-            "type": "string"
+            "type": "string",
+            "minLength": 2
           }
         }
       }
@@ -103,6 +105,9 @@ _Example:_ GET Form with required query parameter
   }
 }
 ```
+
+https://editor.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml
+
 
 # HAL Form - i18n Extention
 
