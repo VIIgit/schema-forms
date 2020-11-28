@@ -28,14 +28,15 @@ The motivation is to combine and extend HAL-Forms with  JSON-Schema and to provi
 
 JSON schema is a popular standard for API model specifications and has many libraries that make use of it e.g.:
 
-- JSON Schema Code Generators ( for Java, Python, ...)
-- JSON Schema Forms ( https://github.com/rjsf-team/react-jsonschema-form )
-- JSON Schema Validators (Ajv,...)
-- JSON Schema Example Generators (FakerJs, ...)
+- JSON Schema: With [OpenAPI](https://swagger.io/specification/) [3.1.0-rc](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md#schemaObject) the schema object is a superset of the [JSON Schema Specification Draft 2019-09](http://json-schema.org)
+- JSON Schema: Code Generators ( for Java, Python, ...)
+- JSON Schema: Forms ( https://github.com/rjsf-team/react-jsonschema-form )
+- JSON Schema: Validators (Ajv,...)
+- JSON Schema: Example Generators (FakerJs, ...)
 
-### Comparison between HAL Forms and JSON Validation Schema
+### Comparison between HAL Forms's `properties` and `schema` as JSON Validation Schema
 
-HAL Form <br>`_templates..properties` | JSON Schema <br>alternative
+HAL Form <br>`_templates..properties` | JSON Validation Schema <br>`_templates..schema`
 :--- | :---
 `name` | attribute's name
 `prompt` | MAY `example`
@@ -44,6 +45,7 @@ HAL Form <br>`_templates..properties` | JSON Schema <br>alternative
 **Validation Keywords for Strings:** |
 `regex` | `pattern`
 `regex` | `minLength`, `maxLength`, ...
+n/a | `format` for 'date', 'date-time', ...
 **Validation Keywords for Objects:** |
 `required` | `required`
 n/a | `dependentRequired`
@@ -53,10 +55,11 @@ n/a | `maxItems`, `minItems`, `uniqueItems`, ...
 `readOnly` | `readOnly`
 n/a | `writeOnly`, ...
 *n/a | `title`, `description` UI agnostic, but COULD be used as Label, Tooltip, ...
-**Keywords for Applying Subschemas:** |
+**Keywords for applying alternative schemas:** |
 n/a | `oneOf`, `anyOf` at Object level
 `regex` | `oneOf` type(e.g. string) level options (localized complex `enum`)
-n/a | `if`, `then`, `else`, `dependentSchemas` conditional subschema
+**Keywords for applying conditional schemas:** |
+n/a | `if`, `then`, `else`, `dependentSchemas`
 n/a | [many more...](https://json-schema.org/draft/2019-09/json-schema-validation.html)
 
 # HAL Form - JSONSchema Extention
@@ -67,21 +70,20 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Definition
 
-[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `_template` element contains an additional `jsonSchema` property:
+[HAL-Forms](http://rwcbook.github.io/hal-forms/)'s `_template` element contains an additional `schema` property:
   
-- `jsonSchema` MUST contains a valid JSON Validation Schema
-- `jsonSchema` MUST match with the schema of the `method` to construct a successful subsequent request
-- `jsonSchema` is an OPTIONAL property
-- `jsonSchema` MAY has a canonical URI of the whole schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
-- `jsonSchema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) and the operation (GET, POST, PATCH, ...)
-- `jsonSchema` MAY provides `title` and `description` which SHOULD be localized
-- only one of `jsonSchema` or `properties` property is present. Providing both would be redundant
+- `schema` MUST contains a valid JSON Validation Schema
+- `schema` MUST match with the schema of the `method` to construct a successful subsequent request
+- `schema` is an OPTIONAL property
+- `schema` MAY has a canonical URI of the whole schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
+- `schema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) and the operation (GET, POST, PATCH, ...)
+- `schema` MAY provides `title` and `description` which SHOULD be localized
+- only one of `schema` or `properties` property is present. Providing both would be redundant.
 
 _Example:_ GET Form with required query parameter
 
 ``` javascript
 {
-  "firstName": "John",
   ...
 
   "_templates" : {
@@ -89,7 +91,7 @@ _Example:_ GET Form with required query parameter
       "title" : "Filter",
       "method":"GET",
       "contentType": "application/x-www-form-urlencoded",
-      "jsonSchema": {
+      "schema": {
         "$id": "http://example.com/api/v1/employees",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
@@ -129,25 +131,20 @@ Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
 Note right of Provider: 1st page of Employees\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: Ok (JSON Data)
 
-Note over Consumer: 2. GET `jsonSchema`
-Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\nwith `Cache-Control` Header
-Provider-->Consumer: 200: Ok (JSON Schema)
-
-Note over Consumer: 3. Add new Employee\nwith HAL Forms
+Note over Consumer: 2. Add new Employee\nwith HAL Forms
 Consumer->Provider: POST /api/v1/employees\n[application/prs.hal-forms+json]
 Note right of Provider: a)Created Employees\nwith HAL Link\nwith HAL Forms
 Provider-->Consumer: 201: Created (JSON Data)
 Note right of Provider: b) or\nwith validation failures\n\nwith updated HAL Forms
 Provider-->Consumer: 400: Bad request (JSON Data)
 
-Note over Consumer: 4. Read next Employees\nwithout HAL Form
+Note over Consumer: 3. Read next Employees\nwithout HAL Form
 Consumer->Provider: GET /api/v1/employees?page=2\n[application/hal+json]
 Note right of Provider: 2nd page of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
 </div>
 
-### 1. Get Data with HAL-Forms (JSON Schema enhanced)
+### 1. Get Data (Collection) with HAL-Forms (JSON Schema enhanced)
 
 Request
 
@@ -199,8 +196,8 @@ Content-Type: application/prs.hal-forms+json;
       "title": "Search Employee",
       "method": "GET",
       "contentType": "application/x-www-form-urlencoded",
-      "jsonSchema": {
-        "$id": "http://example.com/api/v1/employees",
+      "schema": {
+        "$id": "http://example.com/api/v1/employees#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "properties": {
@@ -217,8 +214,8 @@ Content-Type: application/prs.hal-forms+json;
       "title": "Add Employee",
       "method": "POST",
       "contentType": "application/json",
-      "jsonSchema": {
-        "$id": "http://example.com/api/v1/employees",
+      "schema": {
+        "$id": "http://example.com/api/v1/employees#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "required": [
@@ -254,7 +251,7 @@ Content-Type: application/prs.hal-forms+json;
 
 ### 2. Get employee's JSON Validation Schema
 
-Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
+Follow the `schema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
 There is no standard yet but a [controversial feature request @ json-schema-org](https://github.com/json-schema-org/json-schema-vocabularies) [annotation: Multilingual meta data](https://github.com/json-schema-org/json-schema-spec/issues/53)
 
@@ -572,7 +569,7 @@ Content-Type: application/problem+json;
       "title": "Add Employee",
       "method": "POST",
       "contentType": "application/json",
-      "jsonSchema": {
+      "schema": {
         "$id": "http://example.com/api/employees",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
@@ -670,7 +667,7 @@ Consumer->Provider: GET /api/v1/employees/1\n[application/prs.hal-forms+json]
 Note right of Provider: An Employee\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: Ok (JSON Data)
 
-Note over Consumer: 6. GET `jsonSchema`
+Note over Consumer: 6. GET `schema`
 Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
 Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\nwith `Cache-Control` Header
 Provider-->Consumer: 304: Not Modified
@@ -732,7 +729,7 @@ Content-Type: application/prs.hal-forms+json;
       "title": "Edit Employee",
       "method": "PATCH",
       "contentType": "application/json",
-      "jsonSchema": {
+      "schema": {
         "$id": "http://example.com/api/v1/employees",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
@@ -763,7 +760,7 @@ Content-Type: application/prs.hal-forms+json;
 
 ### 6. Get employee's JSON Validation Schema
 
-Follow the `jsonSchema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
+Follow the `schema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
 
 Request
 ```
@@ -842,7 +839,7 @@ Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
 Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: JSON Data
 
-Note over Consumer: 2. Follow uri ($id) of\n`jsonSchema` within HAL Forms
+Note over Consumer: 2. Follow uri ($id) of\n`schema` within HAL Forms
 Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
 Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
 Provider-->Consumer: 304: Not Modified

@@ -104,7 +104,7 @@ paths:
                         title: Add Employee
                         method: POST
                         contentType: application/json
-                        jsonSchema:
+                        schema:
                           $id: http://example.com/api/v1/employees
                           $schema: https://json-schema.org/draft/2019-09/schema
                           type: object
@@ -394,7 +394,7 @@ components:
                 contentType: 
                   type: string
                   example: application/json
-                jsonSchema:
+                schema:
                   type: object
                   example:
                     $id: "http://example.com/api/v1/employees"
@@ -454,7 +454,7 @@ components:
                   contentType: 
                     type: string
                     example: application/json
-                  jsonSchema:
+                  schema:
                     type: object
                     example:
                       $id: "http://example.com/api/v1/employees"
@@ -602,7 +602,7 @@ components:
                 contentType: 
                   type: string
                   example: application/json
-                jsonSchema:
+                schema:
                   type: object
                   example:
                     $id: "http://example.com/api/v1/employees"
