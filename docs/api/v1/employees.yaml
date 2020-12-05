@@ -95,7 +95,7 @@ paths:
                     type: https://example.com/validation-error
                     title: Your request parameters didn't validate.
                     invalidProperties:
-                      - $id: "#/birthday"
+                      - $id: "#/dateOfBirth"
                         reason: must be in the past
                       - $id: "#/email"
                         reason: exists already
@@ -105,14 +105,14 @@ paths:
                         method: POST
                         contentType: application/json
                         schema:
-                          $id: http://example.com/api/v1/employees
+                          $id: http://example.com/api/v1/employees.json
                           $schema: https://json-schema.org/draft/2019-09/schema
                           type: object
                           properties:
                             id: {}
                             firstName: {}
                             lastName: {}
-                            birthday: {}
+                            dateOfBirth: {}
                             email:
                               enum:
                                 - john.doe-01@example.com
@@ -124,7 +124,7 @@ paths:
                     type: https://example.com/validation-error
                     title: Your request parameters didn't validate.
                     invalidProperties:
-                      - $id: "#/birthday"
+                      - $id: "#/dateOfBirth"
                         reason: must be in the past
                       - $id: "#/email"
                         reason: exists already
@@ -287,7 +287,7 @@ paths:
               examples:
                 schema:
                   $ref: '#/components/examples/EmployeesJsonSchema'
-            application/schema-instance+json; schema="http://example.com/api/v1/employees":
+            application/schema-instance+json; schema="http://example.com/api/v1/employees.json#employee":
               schema:
                 type: object
               examples:
@@ -359,7 +359,7 @@ components:
           type: string
           example: Doe
           minLength: 1
-        birthday:
+        dateOfBirth:
           type: string
           format: date
           example: "2000-12-31"
@@ -397,7 +397,7 @@ components:
                 schema:
                   type: object
                   example:
-                    $id: "http://example.com/api/v1/employees"
+                    $id: "http://example.com/api/v1/employees.json#employee"
                     $schema: "https://json-schema.org/draft/2019-09/schema"
                     type: object
                     properties:
@@ -412,7 +412,7 @@ components:
                         type: string
                         example: Doe
                         minLength: 1
-                      birthday:
+                      dateOfBirth:
                         type: string
                         format: date
                         example: 2000-12-31
@@ -457,7 +457,7 @@ components:
                   schema:
                     type: object
                     example:
-                      $id: "http://example.com/api/v1/employees"
+                      $id: "http://example.com/api/v1/employees.json#employee"
                       $schema: "https://json-schema.org/draft/2019-09/schema"
                       type: object
                       properties:
@@ -472,7 +472,7 @@ components:
                           type: string
                           example: Doe
                           minLength: 1
-                        birthday:
+                        dateOfBirth:
                           type: string
                           format: date
                           example: 2000-12-31
@@ -579,7 +579,7 @@ components:
               reason:
                 type: string
           example:
-            - "$id": "#/birthday"
+            - "$id": "#/dateOfBirth"
               reason: "must be in the past"
             - "$id": "#/email"
               reason: "exists already"
@@ -605,14 +605,14 @@ components:
                 schema:
                   type: object
                   example:
-                    $id: "http://example.com/api/v1/employees"
+                    $id: "http://example.com/api/v1/employees.json#employee"
                     $schema: "https://json-schema.org/draft/2019-09/schema"
                     type: object
                     properties:
                       id: {}
                       firstName: {}
                       lastName: {}
-                      birthday: {}
+                      dateOfBirth: {}
                       email:
                         enum: 
                         - john.doe-01@example.com
@@ -625,7 +625,7 @@ components:
           properties:
             $id:
               type: string
-              example: "http://example.com/api/v1/employees"
+              example: "http://example.com/api/v1/employees.json#employee"
             $schema:
               type: string
               example: "https://json-schema.org/draft/2019-09/schema"
@@ -751,7 +751,7 @@ components:
     EmployeesJsonSchema:
       summary: A sample object
       value:
-        $id: "http://example.com/api/v1/employees"
+        $id: "http://example.com/api/v1/employees.json"
         $schema: "https://json-schema.org/draft/2019-09/schema"
         $defs:
           employeeSalary:
@@ -779,7 +779,7 @@ components:
             type: string
             example: Doe
             minLength: 1
-          birthday:
+          dateOfBirth:
             type: string
             format: date
           email:

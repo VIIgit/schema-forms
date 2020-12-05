@@ -27,7 +27,7 @@ properties:
     type: string
     example: Doe
     minLength: 1
-  birthday:
+  dateOfBirth:
     type: string
     format: date
   email:

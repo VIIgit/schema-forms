@@ -3,7 +3,7 @@ $defs.resign.reason.title: Reason for termination
 employees.id.title: "#" 
 employees.id.firstName.title: First Name
 employees.id.lastName.title: Last Name
-employees.id.birthday.title: Birthday Name
+employees.id.dateOfBirth.title: Date of Birth
 employees.id.email.title: Email
 employees.id.workload.title: Workload
 employees.id.workload.oneOf.PART-TIME.title: Part time

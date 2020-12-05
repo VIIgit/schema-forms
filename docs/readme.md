@@ -45,7 +45,7 @@ HAL Form <br>`_templates..properties` | JSON Validation Schema <br>`_templates..
 **Validation Keywords for Strings:** |
 `regex` | `pattern`
 `regex` | `minLength`, `maxLength`, ...
-n/a | `format` for 'date', 'date-time', ...
+n/a | `format` for `date`, `date-time`, ...
 **Validation Keywords for Objects:** |
 `required` | `required`
 n/a | `dependentRequired`
@@ -56,7 +56,7 @@ n/a | `maxItems`, `minItems`, `uniqueItems`, ...
 n/a | `writeOnly`, ...
 *n/a | `title`, `description` UI agnostic, but COULD be used as Label, Tooltip, ...
 **Keywords for applying alternative schemas:** |
-n/a | `oneOf`, `anyOf` at Object level
+n/a | `oneOf`, `anyOf` at object level
 `regex` | `oneOf` type(e.g. string) level options (localized complex `enum`)
 **Keywords for applying conditional schemas:** |
 n/a | `if`, `then`, `else`, `dependentSchemas`
@@ -76,7 +76,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - `schema` MUST match with the schema of the `method` to construct a successful subsequent request
 - `schema` is an OPTIONAL property
 - `schema` MAY has a canonical URI of the whole schema (e.g `"$id": "http://example.com/api/v1/employees.json"`)
-- `schema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different modification rights), the status of the data record (active, final status) and the operation (GET, POST, PATCH, ...)
+- `schema` MAY contains the referenced schema or a dynamic subset, depending on the context of the user (different access or modification rights), the status of data record (e.g. active, archived, ...) and the operation (GET, POST, PATCH, ...)
 - `schema` MAY provides `title` and `description` which SHOULD be localized
 - only one of `schema` or `properties` property is present. Providing both would be redundant.
 
@@ -92,7 +92,7 @@ _Example:_ GET Form with required query parameter
       "method":"GET",
       "contentType": "application/x-www-form-urlencoded",
       "schema": {
-        "$id": "http://example.com/api/v1/employees",
+        "$id": "http://example.com/api/v1/employees.json#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "required": ["firstName"],
@@ -108,22 +108,13 @@ _Example:_ GET Form with required query parameter
 }
 ```
 
-https://editor.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml
-
-
-# HAL Form - i18n Extention
-
-### Compliance
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119](http://tools.ietf.org/html/rfc2119)..
-
-## Definition
+Example [/api/v1/employees.yaml](https://editor.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
 
 # Workflow Examples
 
-## API Resource Collections
+## HAL Forms for Collections
 
-This example shows possible workflows to get the collection of records with their form templates and dynamic JSON schemas:
+This example shows possible workflows to get the collection of records with HAL form templates and dynamic JSON schemas:
 
 <div class="diagram">
 Note over Consumer: 1. Read Employees\nwith HAL Forms
@@ -144,12 +135,13 @@ Note right of Provider: 2nd page of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
 </div>
 
-### 1. Get Data (Collection) with HAL-Forms (JSON Schema enhanced)
+### 1. Get a list of employees with HAL-Forms (JSON Schema enhanced)
 
 Request
 
 ``` javascript
 GET /api/v1/employees HTTP/1.1
+
 Accept: application/prs.hal-forms+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -167,7 +159,7 @@ Content-Type: application/prs.hal-forms+json;
         "id": 1,
         "firstName": "John",
         "lastName": "string",
-        "birthday": "2000-12-31",
+        "dateOfBirth": "2000-12-31",
         "email": "john.doe@example.com",
         "workload": "PART-TIME",
         "active": true,
@@ -197,7 +189,7 @@ Content-Type: application/prs.hal-forms+json;
       "method": "GET",
       "contentType": "application/x-www-form-urlencoded",
       "schema": {
-        "$id": "http://example.com/api/v1/employees#employee",
+        "$id": "http://example.com/api/v1/employees.json#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "properties": {
@@ -215,20 +207,20 @@ Content-Type: application/prs.hal-forms+json;
       "method": "POST",
       "contentType": "application/json",
       "schema": {
-        "$id": "http://example.com/api/v1/employees#employee",
+        "$id": "http://example.com/api/v1/employees.json#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "required": [
           "firstName",
           "lastName",
-          "birthday"
+          "dateOfBirth"
         ],
         "properties": {
           "firstName": {
           },
           "lastName": {
           },
-          "birthday": {
+          "dateOfBirth": {
           },
           "email": {
           },
@@ -249,268 +241,7 @@ Content-Type: application/prs.hal-forms+json;
 }
 ```
 
-### 2. Get employee's JSON Validation Schema
-
-Follow the `schema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
-
-There is no standard yet but a [controversial feature request @ json-schema-org](https://github.com/json-schema-org/json-schema-vocabularies) [annotation: Multilingual meta data](https://github.com/json-schema-org/json-schema-spec/issues/53)
-
-Request
-
-``` javascript
-GET /api/v1/employees HTTP/1.1
-Accept: application/schema+json;
-Accept-Language: en; fr;q=0.9, de;q=0.8
-```
-
-Response
-
-``` javascript
-HTTP 200
-Content-Type: application/schema+json;
-Content-Language: en
-Cache-Control: max-age=3600
-Etag: x123dfff
-Vary: Accept-Language
-
-{
-    "$id": "http://example.com/api/v1/employees",
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
-    "$defs": {
-        "employeeSalary": {
-            "$anchor": "salary",
-            "$id": "http://example.com/api/v1/salaries"
-        },
-        "resign": {
-            "$anchor": "ResignReason",
-            "type": "object",
-            "title": "Resign",
-            "properties": {
-                "reason": {
-                    "type": "string",
-                    "title": "Reason for termination",
-                    "minLength": 10,
-                    "maxLength": 100
-                }
-            }
-        },
-        "employeeLinks": {
-            "$anchor": "EmployeeLinks",
-            "type": "object",
-            "properties": {
-                "_links": {
-                    "type": "object",
-                    "properties": {
-                        "self": {
-                            "type": "object",
-                            "title": "Refresh"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "$anchor": "employee",
-    "type": "object",
-    "properties": {
-        "id": {
-            "type": "integer",
-            "title": "#"
-        },
-        "firstName": {
-            "type": "string",
-            "title": "First Name",
-            "description": "First name with initials of the second first name",
-            "example": "John F.",
-            "minLength": 1
-        },
-        "lastName": {
-            "type": "string",
-            "title": "Last Name",
-            "example": "Doe",
-            "minLength": 1
-        },
-        "birthday": {
-            "type": "string",
-            "title": "Date of Birth",
-            "default" : "1990-01-01",
-            "format": "date"
-        },
-        "email": {
-            "type": "string",
-            "title": "Email",
-            "format": "email"
-        },
-        "workload": {
-            "type": "string",
-            "title": "Workload",
-            "oneOf": [
-                {
-                    "const": "PART-TIME",
-                    "title": "Part-time"
-                },{
-                    "const": "PERMANENT",
-                    "title": "Permanent"
-                }
-            ]
-        },
-        "active": {
-            "type": "boolean",
-            "title": "Status",
-            "oneOf": [
-                {
-                    "const": true,
-                    "title": "Active"
-                },{
-                    "const": false,
-                    "title": "Resigned"
-                }
-            ]
-        }
-    }
-}
-```
-
-Request Internationalization of schema attributes
-
-``` javascript
-GET /api/v1/employees HTTP/1.1
-Accept: application/schema-i18n+json;
-Accept-Language: en; fr;q=0.9, de;q=0.8
-```
-
-Response Option A
-
-``` javascript
-HTTP 200
-Content-Type: application/schema-i18n+json;
-Content-Language: en
-Cache-Control: max-age=3600
-Etag: x123dfff
-Vary: Accept-Language
-
-{
-    "$id": "http://example.com/api/v1/employees",
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
-    "$defs": {
-        "resign": {
-            "title": "Resign",
-            "properties": {
-                "reason": {
-                    "title": "Reason for termination"
-                }
-            }
-        },
-        "employeeLinks": {
-            "properties": {
-                "_links": {
-                    "properties": {
-                            "title": "Refresh"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "$anchor": "employee",
-    "type": "object",
-    "properties": {
-        "id": {
-            "title": "#"
-        },
-        "firstName": {
-            "title": "First Name",
-            "description": "First name with initials of the second first name",
-            "example": "Employee's first name"
-        },
-        "lastName": {
-            "title": "Last Name",
-            "example": "Doe"
-        },
-        "birthday": {
-            "title": "Date of Birth"
-        },
-        "email": {
-            "title": "Email",
-            "default" : "@example.com"
-        },
-        "workload": {
-            "title": "Workload",
-            "oneOf": [
-                {
-                    "const": "PART-TIME",
-                    "title": "Part-time"
-                },{
-                    "const": "PERMANENT",
-                    "title": "Permanent"
-                }
-            ]
-        },
-        "active": {
-            "title": "Status",
-            "oneOf": [
-                {
-                    "const": true,
-                    "title": "Active"
-                },{
-                    "const": false,
-                    "title": "Resigned"
-                }
-            ]
-        }
-    }
-}
-```
-
-Response Option B
-
-[spring-hateoas#mediatypes.hal-forms.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n)
-
-```
-HTTP 200
-Content-Type: application/schema-i18n+json;
-Content-Language: en
-Cache-Control: max-age=3600
-Etag: x123dfff
-Vary: Accept-Language
-
-{
-    "$id": "http://example.com/api/v1/employees",
-
-    "Employee.titel": "Employee",
-
-    "Employee.id.titel": "#",
-
-    "Employee.firstName.titel": "First Name",
-    "Employee.firstName.description": "First name with initials of the second first name",
-    "Employee.firstName.example": "Employee's first name",
-
-    "Employee.lastName.titel": "Last Name",
-    "Employee.lastName.example": "Employee's first name",
-
-    "Employee.birthday.titel": "Date of Birth",
-
-    "Employee.email.titel": "Email",
-    "Employee.email.description": "Business email address",
-    "Employee.email.default": "@example.com",
-
-    "Employee.workload.titel": "Workload",
-    "Employee.workload.oneOf.PART-TIME.title": "Part-time",
-    "Employee.workload.oneOf.PERMANENT.title": "Permanent",
-
-    "Employee.active.titel": "Status",
-    "Employee.active.oneOf.true.title": "Active",
-    "Employee.active.oneOf.false.title": "Resigned",
-
-
-    "ResignReason.title": "Resign",
-    "ResignReason.reason.title": "Reason for termination",
-
-    "EmployeeLinks._links.self.title": "Refresh"
-}
-```
-
-### 3. Submit new Employee Record
+### 2. Add an employee with HAL-Forms (JSON Schema enhanced) 
 
 Request
 
@@ -522,7 +253,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 {
   "firstName": "John",
   "lastName": "Doe",
-  "birthday": "2200-12-31",
+  "dateOfBirth": "2200-12-31",
   "email": "john.doe@example.com",
   "workload": "PART-TIME"
 }
@@ -556,8 +287,8 @@ Content-Type: application/problem+json;
   "title": "Your request parameters didn't validate.",
   "invalidProperties": [
     {
-      "$id": "#/birthday",
-      "reason": "must be in the past"
+      "$id": "#/dateOfBirth",
+      "reason": "Employee must be older than 18 years old"
     },
     {
       "$id": "#/email",
@@ -570,20 +301,20 @@ Content-Type: application/problem+json;
       "method": "POST",
       "contentType": "application/json",
       "schema": {
-        "$id": "http://example.com/api/employees",
+        "$id": "http://example.com/api/v1/employees.yaml#employee",
         "$schema": "https://json-schema.org/draft/2019-09/schema",
         "type": "object",
         "required": [
           "firstName",
           "lastName",
-          "birthday"
+          "dateOfBirth"
         ],
         "properties": {
           "firstName": {
           },
           "lastName": {
           },
-          "birthday": {
+          "dateOfBirth": {
           },
           "email": {
             "enum": [
@@ -608,14 +339,15 @@ Content-Type: application/problem+json;
 }
 ```
 
-### 4. Get more employees (next page)
+### 3. Get more employees (next page)
 
 A HAL form is usually required for the first request. The HAL form can be omitted in subsequent request.
 
 Request
 
 ``` javascript
-GET /api/v1/employees HTTP/1.1
+GET /api/v1/employees?page=2 HTTP/1.1
+
 Accept: application/hal+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -633,7 +365,7 @@ Content-Type: application/hal+json;
         "id": 21,
         "firstName": "Mary",
         "lastName": "Moe",
-        "birthday": "1999-02-28",
+        "dateOfBirth": "1999-02-28",
         "email": "mary.moe@example.com",
         "workload": "PERMANENT",
         "_links": {
@@ -705,7 +437,7 @@ Content-Type: application/prs.hal-forms+json;
   "id": 1,
   "firstName": "John",
   "lastName": "doe",
-  "birthday": "2000-12-31",
+  "dateOfBirth": "2000-12-31",
   "email": "john.doe@example.com",
   "workload": "PART-TIME",
   "_links": {
@@ -804,7 +536,7 @@ Content-Type: application/hal+json;
         "id": 21,
         "firstName": "Mary",
         "lastName": "Moe",
-        "birthday": "1999-02-28",
+        "dateOfBirth": "1999-02-28",
         "email": "mary.moe@example.com",
         "workload": "PERMANENT",
         "active": true,
@@ -839,20 +571,22 @@ Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
 Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: JSON Data
 
-Note over Consumer: 2. Follow uri ($id) of\n`schema` within HAL Forms
-Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` and `Cache-Control` HTTP Header
-Provider-->Consumer: 304: Not Modified
-
-Note over Consumer: 3a. Update Employee (With HAL Form)
+Note over Consumer: 2a. Update Employee (With HAL Form)
 Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
 Note right of Provider: Collection of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
 
-Note over Consumer: 3b. Update Employee (Without HAL Form)
+Note over Consumer: 2b. Update Employee (Without HAL Form)
 Consumer->Provider: GET /api/v1/employees?page=2\n[application/json]
 Note right of Provider: Collection of Employees\nwith HAL Links
 Provider-->Consumer: 200: JSON Data
+</div>
+
+<div class="diagram">
+Note over Consumer: 1. Follow uri ($id) of\n`schema` within HAL Form's template to get all JSON Schema details
+Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
+Note right of Provider: Static JSON Schema\nof the Employee Resource\nwith `Cache-Control` HTTP Header
+Provider-->Consumer: 200: JSON Schema
 </div>
 
 ### Example UI

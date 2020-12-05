@@ -13,7 +13,7 @@
   "Employee.lastName.titel": "Last Name",
   "Employee.lastName.example": "Doe",
 
-  "Employee.birthday.titel": "Date of Birth",
+  "Employee.dateOfBirth.titel": "Date of Birth",
 
   "Employee.email.titel": "Email",
   "Employee.email.description": "Business email address",
