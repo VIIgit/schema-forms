@@ -287,7 +287,7 @@ paths:
               examples:
                 schema:
                   $ref: '#/components/examples/EmployeesJsonSchema'
-            application/schema-instance+json; schema="http://example.com/api/v1/employees.json#employee":
+            application/schema-instance+json; schema="http://example.com/api/v1/employees.json":
               schema:
                 type: object
               examples:
@@ -321,9 +321,6 @@ paths:
             application/schema-instance+json; schema="http://example.com/api/v1/salaries":
               schema:
                 $ref: '#/components/schemas/SalariesJsonSchema'
-            xxx:
-              schema: 
-                $ref: "https://viigit.github.io/schema-forms/api/v1/employees.json#"
 
 components:
 

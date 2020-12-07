@@ -595,13 +595,15 @@ Provider-->Consumer: 200: JSON Schema
 
 # Localization
 
-https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n
-https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n
+[spring-hateoas mediatypes.hal.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
+[spring-hateoas mediatypes.hal-forms.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n)
 
 [/api/v1/employees.json](https://viigit.github.io/schema-forms/api/v1/employees.json)
 [/api/v1/employees.i18n.en.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json)
 [/api/v1/employees.i18n.de.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json)
 [/api/v1/employees_en_US.properties](https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties.txt)
+
+[Alternative Options](https://viigit.github.io/schema-forms/readme-i18n.html)
 
 # References
 
