@@ -10,6 +10,7 @@
     <li><a href="#hal-form---jsonschema-extention">HAL Form Schema Extention</a></li>
     <li><a href="#hal-forms-of-a-record-collections">Collection Example</a></li>
     <li><a href="#hal-forms-of-a-specific-record">Specific Record Examples</a></li>
+    <li><a href="#localization">Localization</a></li>
     <li><a href="#references">References</a></li>
   </ul>
 </nav>
@@ -89,7 +90,7 @@ _Example:_ GET Form with required query parameter
   "_templates" : {
     "default" : {
       "title" : "Filter",
-      "method":"GET",
+      "method": "get",
       "contentType": "application/x-www-form-urlencoded",
       "schema": {
         "$id": "http://example.com/api/v1/employees.json#employee",
@@ -186,7 +187,7 @@ Content-Type: application/prs.hal-forms+json;
   "_templates": {
     "self": {
       "title": "Search Employee",
-      "method": "GET",
+      "method": "get",
       "contentType": "application/x-www-form-urlencoded",
       "schema": {
         "$id": "http://example.com/api/v1/employees.json#employee",
@@ -204,7 +205,7 @@ Content-Type: application/prs.hal-forms+json;
     },
     "addEmployee": {
       "title": "Add Employee",
-      "method": "POST",
+      "method": "post",
       "contentType": "application/json",
       "schema": {
         "$id": "http://example.com/api/v1/employees.json#employee",
@@ -262,7 +263,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 
 Responses
 
-- 3a) Created
+- 2a) Created
   
 ``` javascript
 HTTP 201
@@ -277,7 +278,7 @@ Content-Type: application/hal+json;
 }
 ```
 
-- 3b) Bad Request
+- 2b) Bad Request
 
 ``` javascript
 HTTP 400
@@ -299,7 +300,7 @@ Content-Type: application/problem+json;
   "_templates": {
     "addEmployee": {
       "title": "Add Employee",
-      "method": "POST",
+      "method": "post",
       "contentType": "application/json",
       "schema": {
         "$id": "http://example.com/api/v1/employees.yaml#employee",
@@ -395,35 +396,31 @@ Content-Type: application/hal+json;
 ## HAL Forms of a specific record
 
 <div class="diagram">
-Note over Consumer: 5. Read Employee\nwith HAL Forms
+Note over Consumer: 4. Read Employee\nwith HAL Forms
 Consumer->Provider: GET /api/v1/employees/1\n[application/prs.hal-forms+json]
 Note right of Provider: An Employee\nwith HAL Links\nwith HAL Forms
 Provider-->Consumer: 200: Ok (JSON Data)
 
-Note over Consumer: 6. GET `schema`
-Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Localized static JSON Schema\nof the Employee Resource\nwith `ETag` Header\nwith `Cache-Control` Header
-Provider-->Consumer: 304: Not Modified
-
-Note over Consumer: 7. Update Employee\nwith HAL Forms
+Note over Consumer: 5. Update Employee\nwith HAL Forms
 Consumer->Provider: POST /api/v1/employees/1\n[application/prs.hal-forms+json]
 Note right of Provider: a)Employee updated
 Provider-->Consumer: 204: No Content (JSON Data)
 Note right of Provider: b) or\nwith validation failures\n\nwith updated HAL Forms
 Provider-->Consumer: 400: Bad request (JSON Data)
 
-Note over Consumer: 8. Read next Employees\nwithout HAL Form
+Note over Consumer: 6. Delete Employees\nwithout HAL Form
 Consumer->Provider: DELETE /api/v1/employees/1\n[application/hal+json]
 Note right of Provider: Employee Removed
 Provider-->Consumer: 204: No Content
 </div>
 
-### 5. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
+### 4. Get Data with HAL-Forms of a specific API Resource (JSON Schema enhanced)
 
 Request
 
 ``` javascript
 GET /api/v1/employees/1 HTTP/1.1
+
 Accept: application/prs.hal-forms+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -431,7 +428,7 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 Response
 
 ``` javascript
-HTTP 200
+HTTP 200 Ok
 Content-Type: application/prs.hal-forms+json;
 
 {
@@ -442,25 +439,20 @@ Content-Type: application/prs.hal-forms+json;
   "email": "john.doe@example.com",
   "workload": "PART-TIME",
   "_links": {
-      "self": {
-        "href": "http://example.com/employees/1"
-      },
-      "leavesCompany": {
-        "href": "http://example.com/api/v1/employees/1"
-      }
-  },
-  "_links": {
-      "self": {
-          "href": "http://example.com/api/v1/employees?page=1"
-      },
-      "next": {
-          "href": "http://example.com/api/v1/employees?page=2"
-      }
+    "self": {
+      "href": "http://example.com/employees/1"
+    },
+    "updateEmployee": {
+      "href": "http://example.com/api/v1/employees/1"
+    },
+    "deleteEmployee": {
+      "href": "http://example.com/api/v1/employees/1"
+    }
   },
   "_templates": {
-      "updateEmployee": {
+    "updateEmployee": {
       "title": "Edit Employee",
-      "method": "PATCH",
+      "method": "patch",
       "contentType": "application/json",
       "schema": {
         "$id": "http://example.com/api/v1/employees",
@@ -486,41 +478,22 @@ Content-Type: application/prs.hal-forms+json;
           }
         }
       }
+    },
+    "deleteEmployee": {
+      "title": "Delete Employee",
+      "method": "delete"
     }
   }
 }
 ```
 
-### 6. Get employee's JSON Validation Schema
-
-Follow the `schema`'s identifier `"$id": "http://example.com/api/v1/employees"` to get the full, localized and cacheable JSON Validation Schema of the API Resource `/employees`.
-
-Request
-```
-GET /api/v1/employees HTTP/1.1
-
-Accept: application/schema+json;
-Accept-Language: en; fr;q=0.9, de;q=0.8
-If-None-Match: x123dfff
-```
-
-Response
-
-``` javascript
-HTTP 304
-Content-Type: application/schema+json;
-Content-Language: en
-Cache-Control: max-age=3100;
-Etag: x123dfff
-Vary: Accept-Language
-```
-
-### 7. Get more employees (next page)
+### 5. Get more employees (next page)
 
 Request
 
 ``` javascript
-GET /api/v1/employees/1 HTTP/1.1
+DELETE /api/v1/employees/1 HTTP/1.1
+
 Accept: application/hal+json;
 Accept-Language: en; fr;q=0.9, de;q=0.8
 ```
@@ -528,81 +501,21 @@ Accept-Language: en; fr;q=0.9, de;q=0.8
 Response
 
 ``` javascript
-HTTP 200
-Content-Type: application/hal+json;
+HTTP 204 Deleted (No Content)
 
-{
-  "_embedded": {
-    "employees": [
-      {
-        "id": 21,
-        "firstName": "Mary",
-        "lastName": "Moe",
-        "dateOfBirth": "1999-02-28",
-        "email": "mary.moe@example.com",
-        "workload": "PERMANENT",
-        "active": true,
-        "_links": {
-          "self": {
-            "href": "http://example.com/api/v1/employees/21"
-          }
-        }
-      },
-      {...}
-    ]
-  },
-  "_links": {
-    "prev": {
-      "href": "http://example.com/api/v1/employees?page=1"
-    },
-    "self": {
-      "href": "http://example.com/api/v1/employees?page=2"
-    },
-    "next": {
-      "href": "http://example.com/api/v1/employees?page=3"
-    }
-  }
-}
 ```
-
-### Collection Sequence Diagram
-
-<div class="diagram">
-Note over Consumer: 1. Read Employees (With HAL Form)
-Consumer->Provider: GET /api/v1/employees\n[application/prs.hal-forms+json]
-Note right of Provider: Collection of Employees\nwith HAL Links\nwith HAL Forms
-Provider-->Consumer: 200: JSON Data
-
-Note over Consumer: 2a. Update Employee (With HAL Form)
-Consumer->Provider: GET /api/v1/employees?page=2\n[application/prs.hal-forms+json]
-Note right of Provider: Collection of Employees\nwith HAL Links
-Provider-->Consumer: 200: JSON Data
-
-Note over Consumer: 2b. Update Employee (Without HAL Form)
-Consumer->Provider: GET /api/v1/employees?page=2\n[application/json]
-Note right of Provider: Collection of Employees\nwith HAL Links
-Provider-->Consumer: 200: JSON Data
-</div>
-
-<div class="diagram">
-Note over Consumer: 1. Follow uri ($id) of\n`schema` within HAL Form's template to get all JSON Schema details
-Consumer->Provider: GET /api/v1/employees\n[application/schema+json]
-Note right of Provider: Static JSON Schema\nof the Employee Resource\nwith `Cache-Control` HTTP Header
-Provider-->Consumer: 200: JSON Schema
-</div>
-
-### Example UI
 
 # Localization
 
-https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n
-https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n
+- [spring-hateoas mediatypes.hal.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
+- [spring-hateoas mediatypes.hal-forms.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n)
 
-[/api/v1/employees.json](https://viigit.github.io/schema-forms/api/v1/employees.json)
-[/api/v1/employees.i18n.en.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json)
-[/api/v1/employees.i18n.de.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json)
-[/api/v1/employees_en_US.properties](https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties.txt)
+- [/api/v1/employees.json](https://viigit.github.io/schema-forms/api/v1/employees.json)
+- [/api/v1/employees.i18n.en.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.en.json)
+- [/api/v1/employees.i18n.de.json](https://viigit.github.io/schema-forms/api/v1/employees.i18n.de.json)
+- [/api/v1/employees_en_US.properties](https://viigit.github.io/schema-forms/api/v1/employees_en_US.properties.txt)
 
+[Alternative Options](https://viigit.github.io/schema-forms/readme-i18n.html)
 # References
 
 - Example API [/api/v1/employees.yaml](https://petstore.swagger.io/?url=https://viigit.github.io/schema-forms/api/v1/employees.yaml)
@@ -616,8 +529,8 @@ https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.ha
 - Key words for use in RFCs to Indicate Requirement Levels [RFC2119](http://tools.ietf.org/html/rfc2119)
 - Spring.io
   -  Affordance HATEOAS [https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas](https://spring.io/blog/2018/01/12/building-richer-hypermedia-with-spring-hateoas)
-  -  Internationalization [https://docs.spring.io/spring-hateoas/docs/current/reference/html](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
-
+  - [spring-hateoas mediatypes.hal.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal.i18n)
+  - [spring-hateoas mediatypes.hal-forms.i18n](https://docs.spring.io/spring-hateoas/docs/current/reference/html/#mediatypes.hal-forms.i18n)
 - This Page [https://viigit.github.io/schema-forms/](https://viigit.github.io/schema-forms/)
 
 <script> 

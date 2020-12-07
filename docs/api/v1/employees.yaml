@@ -102,7 +102,7 @@ paths:
                     _templates:
                       addEmployee:
                         title: Add Employee
-                        method: POST
+                        method: post
                         contentType: application/json
                         schema:
                           $id: http://example.com/api/v1/employees.json
@@ -387,7 +387,7 @@ components:
                   example: Employee
                 method:
                   type: string
-                  example: POST
+                  example: post
                 contentType: 
                   type: string
                   example: application/json
@@ -429,7 +429,7 @@ components:
               properties:
                 method:
                   type: string
-                  example: DELETE
+                  example: delete
 
     EmployeesTemplates:
       allOf:
@@ -447,7 +447,7 @@ components:
                     example: Add Employee
                   method:
                     type: string
-                    example: POST
+                    example: post
                   contentType: 
                     type: string
                     example: application/json
@@ -595,7 +595,7 @@ components:
                   example: Add Employee
                 method:
                   type: string
-                  example: POST
+                  example: post
                 contentType: 
                   type: string
                   example: application/json
