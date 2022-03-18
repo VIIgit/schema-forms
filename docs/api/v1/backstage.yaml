@@ -1,23 +1,17 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: API
 metadata:
-  name: backstage
-  description: |
-    VII Backstage is an open-source developer portal that puts the developer experience first.
+  name: petstore
+  description: The petstore API
+  tags:
+    - store
+    - rest
   links:
-    - title: Website
-      url: http://backstage.io
-    - title: Documentation
-      url: https://backstage.io/docs
-    - title: Storybook
-      url: https://backstage.io/storybook
-    - title: Discord Chat
-      url: https://discord.com/invite/EBHEGzX
-  annotations:
-    github.com/project-slug: backstage/backstage
-    backstage.io/techdocs-ref: dir:.
-    lighthouse.com/website-url: https://backstage.io
+    - url: https://github.com/swagger-api/swagger-petstore
+      title: GitHub Repo
+      icon: github
+    - url: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore.yaml
+      title: API Spec
+      icon: code
 spec:
-  type: library
-  owner: CNCF
-  lifecycle: experimental
+  $ref: ./employees.yaml
