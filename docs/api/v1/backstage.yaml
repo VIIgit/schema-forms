@@ -1,22 +1,22 @@
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: petstore
-  description: The petstore API
+  name: vii-petstore
+  description: The VII petstore API
   tags:
     - store
     - rest
   links:
-    - url: https://github.com/swagger-api/swagger-petstore
-      title: GitHub Repo
+    - url: https://github.com/VIIgit/schema-forms/edit/master/docs/api/v1/backstage.yaml
+      title: GitHub Repo VII
       icon: github
     - url: https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore.yaml
-      title: API Spec
+      title: API Spec VII
       icon: code
 spec:
   type: openapi
   lifecycle: experimental
-  owner: team-c
+  owner: team-VII
   definition: |
     openapi: "3.0.0"
     info:
